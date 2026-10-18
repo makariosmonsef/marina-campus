@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سنتر مس مارينا التعليمي | Math & English للأطفال والابتدائي</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Font Cairo & Custom Styles -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body class="bg-slate-50 min-h-screen text-slate-800 antialiased selection:bg-purple-100 selection:text-purple-900">
+
+    <!-- App Root Container -->
+    <div id="app-root" class="min-h-screen flex flex-col justify-between">
+        <!-- Will be dynamically populated by App.render() -->
+    </div>
+
+    <!-- Global Modal Backdrop -->
+    <div id="global-modal"
+        class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4 overflow-y-auto">
+        <div
+            class="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100 transition-all transform max-h-[90vh] flex flex-col">
+            <!-- Modal Header -->
+            <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
+                <h3 id="global-modal-title" class="font-extrabold text-slate-900 text-base">عنوان النافذة</h3>
+                <button onclick="CommonUI.closeModal()"
+                    class="p-1 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <!-- Modal Content Body -->
+            <div id="global-modal-body" class="p-6 overflow-y-auto flex-1">
+                <!-- Injected via CommonUI.openModal -->
+            </div>
+            <!-- Modal Footer (Optional) -->
+            <div id="global-modal-footer"
+                class="p-4 bg-slate-50 border-t border-slate-100 hidden justify-end space-x-2 space-x-reverse">
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"
+        class="fixed bottom-5 left-5 z-50 flex flex-col space-y-2 pointer-events-auto max-w-sm w-full"></div>
+
+    <!-- Application Scripts -->
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/store.js"></script>
+    <script src="assets/js/components/common.js"></script>
+    <script src="assets/js/components/superAdmin.js"></script>
+    <script src="assets/js/components/coordinator.js"></script>
+    <script src="assets/js/components/parentPortal.js"></script>
+    <script src="assets/js/components/auth.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+
+</html>
