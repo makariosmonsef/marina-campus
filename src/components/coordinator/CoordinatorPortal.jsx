@@ -159,11 +159,11 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
   return (
     <div className="space-y-6 pb-20">
       {/* Top Coordinator Banner */}
-      <div className="bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-800 rounded-3xl p-6 md:p-8 text-white shadow-xl relative overflow-hidden">
+      <div className="bg-gradient-to-r from-[#29352F] via-[#3A4D43] to-[#425649] rounded-3xl p-6 md:p-8 text-white shadow-xl relative overflow-hidden">
         <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none" />
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center space-x-4 space-x-reverse">
-            <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-3xl md:text-4xl shadow-inner border border-white/30 shrink-0">
+            <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center text-3xl md:text-4xl shadow-inner border border-white/20 shrink-0">
               👨‍💼
             </div>
             <div>
@@ -171,18 +171,18 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
                 <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight">
                   {t('coordinatorTitle')}
                 </h2>
-                <span className="bg-blue-500/40 text-blue-100 text-xs px-3 py-1 rounded-full font-bold border border-white/20">
+                <span className="bg-gold-400 text-forest text-xs px-3 py-1 rounded-full font-black border border-white/20">
                   {t('coordinatorBadge')}
                 </span>
               </div>
-              <p className="text-indigo-100 text-sm mt-1 font-medium">
+              <p className="text-white/80 text-sm mt-1 font-medium">
                 {t('coordinatorWelcome')}
               </p>
               <div className="flex items-center space-x-2 space-x-reverse mt-2 text-xs flex-wrap gap-1">
-                <span className="bg-indigo-900/40 text-indigo-200 px-2.5 py-0.5 rounded-lg">
+                <span className="bg-white/10 text-white/90 px-2.5 py-0.5 rounded-lg">
                   {t('enrolledStudents')}: <strong className="text-white">{students.length}</strong>
                 </span>
-                <span className="bg-indigo-900/40 text-indigo-200 px-2.5 py-0.5 rounded-lg">
+                <span className="bg-white/10 text-white/90 px-2.5 py-0.5 rounded-lg">
                   {t('groupsCount')}: <strong className="text-white">{groups.length}</strong>
                 </span>
               </div>
@@ -192,14 +192,14 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
           <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => setShowAddGroupModal(true)}
-              className="px-4 py-2.5 bg-white text-indigo-900 hover:bg-indigo-50 rounded-2xl font-bold text-xs md:text-sm shadow-md transition flex items-center"
+              className="px-4 py-2.5 bg-brand-500 hover:bg-brand-600 text-white rounded-2xl font-bold text-xs md:text-sm shadow-md transition flex items-center"
             >
-              <PlusCircle className="w-4 h-4 ml-1.5 mr-1.5 text-indigo-600" />
+              <PlusCircle className="w-4 h-4 ml-1.5 mr-1.5 text-white" />
               {t('addNewGroupBtn')}
             </button>
             <button
               onClick={() => setShowAddSlotModal(true)}
-              className="px-4 py-2.5 bg-indigo-500/40 hover:bg-indigo-500/60 text-white rounded-2xl font-bold text-xs md:text-sm shadow-sm transition border border-white/20 flex items-center"
+              className="px-4 py-2.5 bg-white/15 hover:bg-white/25 text-white rounded-2xl font-bold text-xs md:text-sm shadow-sm transition border border-white/20 flex items-center"
             >
               <Clock className="w-4 h-4 ml-1.5 mr-1.5" />
               + موعد تعويضي
@@ -214,8 +214,8 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
             { id: 'groups-management', label: `${t('navGroups')} (${groups.length})` },
             { id: 'attendance-manager', label: t('navAttendance') },
             { id: 'makeup-requests', label: t('navMakeups'), count: pendingMakeups.length, countColor: 'bg-rose-500' },
-            { id: 'payments-manager', label: t('navPayments'), count: pendingPayments.length, countColor: 'bg-amber-400 text-slate-900' },
-            { id: 'messages-center', label: t('navMessages'), count: unreadMessages.length, countColor: 'bg-emerald-400 text-slate-900' },
+            { id: 'payments-manager', label: t('navPayments'), count: pendingPayments.length, countColor: 'bg-gold-400 text-forest' },
+            { id: 'messages-center', label: t('navMessages'), count: unreadMessages.length, countColor: 'bg-emerald-400 text-forest' },
             { id: 'registrations-manager', label: `${t('navRegistrations')} (${registrations.length})` }
           ].map(tab => (
             <button
@@ -223,7 +223,7 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
               onClick={() => onNavigate(tab.id)}
               className={`px-4 py-2 rounded-xl transition whitespace-nowrap flex items-center ${
                 currentTab === tab.id
-                  ? 'bg-white text-indigo-900 shadow-md font-black'
+                  ? 'bg-white text-forest shadow-md font-black'
                   : 'text-white/80 hover:bg-white/10'
               }`}
             >
@@ -242,57 +242,57 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
       {(currentTab === 'dashboard' || !currentTab) && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm">
+            <div className="bg-surface p-5 rounded-3xl border border-surface-border shadow-sm">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-400">{t('totalStudents')}</span>
-                <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                <span className="text-xs font-bold text-forest-muted">{t('totalStudents')}</span>
+                <div className="w-10 h-10 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center">
                   <Users className="w-5 h-5" />
                 </div>
               </div>
               <div className="mt-3">
-                <div className="text-2xl font-black text-slate-800">{students.length}</div>
-                <p className="text-xs text-blue-600 mt-1 font-semibold">{t('kgStage')} & {t('primaryStage')}</p>
+                <div className="text-2xl font-black text-forest">{students.length}</div>
+                <p className="text-xs text-brand-600 mt-1 font-semibold">{t('kgStage')} & {t('primaryStage')}</p>
               </div>
             </div>
 
-            <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm">
+            <div className="bg-surface p-5 rounded-3xl border border-surface-border shadow-sm">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-400">{t('pendingMakeupsCount')}</span>
-                <div className="w-10 h-10 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center">
+                <span className="text-xs font-bold text-forest-muted">{t('pendingMakeupsCount')}</span>
+                <div className="w-10 h-10 rounded-2xl bg-gold-50 text-gold-700 flex items-center justify-center">
                   <RefreshCw className="w-5 h-5" />
                 </div>
               </div>
               <div className="mt-3">
-                <div className="text-2xl font-black text-slate-800">{pendingMakeups.length}</div>
-                <p className={`text-xs mt-1 font-bold ${pendingMakeups.length > 0 ? 'text-rose-600' : 'text-slate-500'}`}>
+                <div className="text-2xl font-black text-forest">{pendingMakeups.length}</div>
+                <p className={`text-xs mt-1 font-bold ${pendingMakeups.length > 0 ? 'text-rose-600' : 'text-forest-muted'}`}>
                   {pendingMakeups.length > 0 ? t('pendingMakeupsDescNeedsAction') : t('pendingMakeupsDescAllDone')}
                 </p>
               </div>
             </div>
 
-            <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm">
+            <div className="bg-surface p-5 rounded-3xl border border-surface-border shadow-sm">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-400">{t('pendingReceiptsCount')}</span>
+                <span className="text-xs font-bold text-forest-muted">{t('pendingReceiptsCount')}</span>
                 <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
                   <Wallet className="w-5 h-5" />
                 </div>
               </div>
               <div className="mt-3">
-                <div className="text-2xl font-black text-slate-800">{pendingPayments.length}</div>
-                <p className="text-xs text-amber-600 mt-1 font-semibold">{t('pendingReceiptsDesc')}</p>
+                <div className="text-2xl font-black text-forest">{pendingPayments.length}</div>
+                <p className="text-xs text-amber-700 mt-1 font-semibold">{t('pendingReceiptsDesc')}</p>
               </div>
             </div>
 
-            <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm">
+            <div className="bg-surface p-5 rounded-3xl border border-surface-border shadow-sm">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-400">{t('newInquiriesCount')}</span>
+                <span className="text-xs font-bold text-forest-muted">{t('newInquiriesCount')}</span>
                 <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
                   <MessageSquare className="w-5 h-5" />
                 </div>
               </div>
               <div className="mt-3">
-                <div className="text-2xl font-black text-slate-800">{unreadMessages.length}</div>
-                <p className="text-xs text-emerald-600 mt-1 font-semibold">{t('newInquiriesDesc')}</p>
+                <div className="text-2xl font-black text-forest">{unreadMessages.length}</div>
+                <p className="text-xs text-emerald-700 mt-1 font-semibold">{t('newInquiriesDesc')}</p>
               </div>
             </div>
           </div>
@@ -300,15 +300,15 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
           {/* Pending Make-ups & Payments Actions Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Urgent Make-ups */}
-            <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm">
+            <div className="bg-surface rounded-3xl p-6 border border-surface-border shadow-sm">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-2 space-x-reverse">
-                  <div className="p-2 rounded-xl bg-purple-50 text-purple-600">
+                  <div className="p-2 rounded-xl bg-gold-50 text-gold-700">
                     <Clock className="w-5 h-5" />
                   </div>
-                  <h3 className="font-bold text-slate-800 text-base">{t('urgentMakeupsTitle')}</h3>
+                  <h3 className="font-bold text-forest text-base">{t('urgentMakeupsTitle')}</h3>
                 </div>
-                <button onClick={() => onNavigate('makeup-requests')} className="text-xs font-bold text-indigo-600 hover:text-indigo-800">
+                <button onClick={() => onNavigate('makeup-requests')} className="text-xs font-bold text-brand-600 hover:text-brand-700">
                   {t('viewAll')}
                 </button>
               </div>
@@ -316,19 +316,19 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
               {pendingMakeups.length > 0 ? (
                 <div className="space-y-3">
                   {pendingMakeups.map(req => (
-                    <div key={req.id} className="p-4 rounded-2xl border border-purple-100 bg-purple-50/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div key={req.id} className="p-4 rounded-2xl border border-surface-border bg-surface-alt/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <div>
                         <div className="flex items-center space-x-2 space-x-reverse">
-                          <span className="font-extrabold text-slate-900 text-sm">{req.studentName}</span>
-                          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-purple-200 text-purple-900">{req.grade}</span>
+                          <span className="font-extrabold text-forest text-sm">{req.studentName}</span>
+                          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-gold-100 text-gold-900">{req.grade}</span>
                         </div>
-                        <div className="text-xs text-slate-600 mt-1">
-                          المادة: <strong className="text-slate-800">{req.subject}</strong> • هاتف: <span className="font-mono">{req.phone}</span>
+                        <div className="text-xs text-forest-muted mt-1">
+                          المادة: <strong className="text-forest">{req.subject}</strong> • هاتف: <span className="font-mono">{req.phone}</span>
                         </div>
-                        <div className="text-xs text-purple-800 font-semibold mt-1">
+                        <div className="text-xs text-brand-700 font-semibold mt-1">
                           الموعد المطلوب: {req.targetTime}
                         </div>
-                        <div className="text-[11px] text-slate-500 mt-1">{req.reason}</div>
+                        <div className="text-[11px] text-forest-muted mt-1">{req.reason}</div>
                       </div>
                       <div className="flex sm:flex-col gap-2">
                         <button
@@ -357,22 +357,22 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
                   ))}
                 </div>
               ) : (
-                <div className="p-8 text-center bg-slate-50 rounded-2xl text-slate-400 text-xs">
+                <div className="p-8 text-center bg-surface-alt/50 rounded-2xl text-forest-muted text-xs">
                   {t('noPendingMakeups')}
                 </div>
               )}
             </div>
 
             {/* Urgent Payments Review */}
-            <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm">
+            <div className="bg-surface rounded-3xl p-6 border border-surface-border shadow-sm">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-2 space-x-reverse">
                   <div className="p-2 rounded-xl bg-amber-50 text-amber-600">
                     <Wallet className="w-5 h-5" />
                   </div>
-                  <h3 className="font-bold text-slate-800 text-base">{t('urgentPaymentsTitle')}</h3>
+                  <h3 className="font-bold text-forest text-base">{t('urgentPaymentsTitle')}</h3>
                 </div>
-                <button onClick={() => onNavigate('payments-manager')} className="text-xs font-bold text-indigo-600 hover:text-indigo-800">
+                <button onClick={() => onNavigate('payments-manager')} className="text-xs font-bold text-brand-600 hover:text-brand-700">
                   {t('viewAll')}
                 </button>
               </div>
@@ -380,16 +380,16 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
               {pendingPayments.length > 0 ? (
                 <div className="space-y-3">
                   {pendingPayments.map(p => (
-                    <div key={p.id} className="p-4 rounded-2xl border border-amber-100 bg-amber-50/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div key={p.id} className="p-4 rounded-2xl border border-surface-border bg-surface-alt/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <div>
                         <div className="flex items-center space-x-2 space-x-reverse">
-                          <span className="font-extrabold text-slate-900 text-sm">{p.studentName}</span>
-                          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-200 text-amber-900">{p.month}</span>
+                          <span className="font-extrabold text-forest text-sm">{p.studentName}</span>
+                          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900">{p.month}</span>
                         </div>
-                        <div className="text-xs text-slate-600 mt-1 font-semibold">
-                          {t('amount')}: <span className="font-bold text-slate-900 font-mono text-sm">{p.amount} {t('currency')}</span> • {p.method}
+                        <div className="text-xs text-forest-muted mt-1 font-semibold">
+                          {t('amount')}: <span className="font-bold text-forest font-mono text-sm">{p.amount} {t('currency')}</span> • {p.method}
                         </div>
-                        <div className="text-[11px] font-mono text-slate-600 mt-1">المرجع: {p.referenceNumber}</div>
+                        <div className="text-[11px] font-mono text-forest-muted mt-1">المرجع: {p.referenceNumber}</div>
                       </div>
                       <div className="flex sm:flex-col gap-2">
                         <button
@@ -406,7 +406,7 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
                             setSelectedChatStudentId(p.studentId);
                             onNavigate('messages-center');
                           }}
-                          className="px-3 py-1.5 bg-white border border-slate-200 text-slate-700 hover:text-indigo-600 rounded-xl font-bold text-xs"
+                          className="px-3 py-1.5 bg-surface border border-surface-border text-forest hover:text-brand-600 rounded-xl font-bold text-xs"
                         >
                           {t('contactParent')}
                         </button>
@@ -415,7 +415,7 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
                   ))}
                 </div>
               ) : (
-                <div className="p-8 text-center bg-slate-50 rounded-2xl text-slate-400 text-xs">
+                <div className="p-8 text-center bg-surface-alt/50 rounded-2xl text-forest-muted text-xs">
                   {t('noPendingPayments')}
                 </div>
               )}
@@ -427,16 +427,16 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
       {/* Tab 2: Groups & Schedule Management */}
       {currentTab === 'groups-management' && (
         <div className="space-y-6">
-          <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="bg-surface p-6 rounded-3xl border border-surface-border shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h3 className="text-xl font-black text-slate-800">{t('navGroups')}</h3>
-              <p className="text-xs text-slate-500 mt-1">
+              <h3 className="text-xl font-black text-forest">{t('navGroups')}</h3>
+              <p className="text-xs text-forest-muted mt-1">
                 تحديد مواعيد الحصص الأسبوعية، القاعات، السعة القصوى، وقائمة الطلاب
               </p>
             </div>
             <button
               onClick={() => setShowAddGroupModal(true)}
-              className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl text-xs shadow-md flex items-center transition"
+              className="px-4 py-2.5 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-2xl text-xs shadow-md flex items-center transition"
             >
               <PlusCircle className="w-4 h-4 ml-1.5 mr-1.5" />
               {t('addNewGroupBtn')}
@@ -445,39 +445,39 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {groups.map(g => (
-              <div key={g.id} className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm hover:border-indigo-300 transition flex flex-col justify-between">
+              <div key={g.id} className="bg-surface rounded-3xl p-5 border border-surface-border shadow-sm hover:border-brand-400 transition flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between">
                     <span className={`text-xs font-bold px-2 py-0.5 rounded-md ${
-                      g.subject === 'math' ? 'bg-indigo-100 text-indigo-800' : 'bg-pink-100 text-pink-800'
+                      g.subject === 'math' ? 'bg-brand-50 text-brand-800' : 'bg-gold-50 text-gold-800'
                     }`}>
                       {g.subjectName}
                     </span>
-                    <span className="text-xs font-bold text-slate-500 font-mono">{g.day}</span>
+                    <span className="text-xs font-bold text-forest-muted font-mono">{g.day}</span>
                   </div>
-                  <h4 className="font-extrabold text-slate-900 text-base mt-2">{g.name}</h4>
-                  <div className="text-xs text-slate-600 mt-2 space-y-1">
+                  <h4 className="font-extrabold text-forest text-base mt-2">{g.name}</h4>
+                  <div className="text-xs text-forest-muted mt-2 space-y-1">
                     <div>🕒 {g.time}</div>
                     <div>📍 {g.location}</div>
-                    <div className="font-bold text-indigo-700">
+                    <div className="font-bold text-brand-700">
                       الاشتراك: {g.monthlyFee} {t('currency')}
                     </div>
-                    <div className={`font-bold ${g.studentIds.length >= g.maxCapacity ? 'text-rose-600' : 'text-emerald-600'}`}>
+                    <div className={`font-bold ${g.studentIds.length >= g.maxCapacity ? 'text-rose-600' : 'text-emerald-700'}`}>
                       المقاعد: {g.studentIds.length} من أصل {g.maxCapacity} طلاب
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                <div className="mt-4 pt-3 border-t border-surface-border flex items-center justify-between gap-2">
                   <button
                     onClick={() => setActiveGroupDetails(g)}
-                    className="text-xs font-bold text-indigo-600 hover:text-indigo-800"
+                    className="text-xs font-bold text-brand-600 hover:text-brand-700"
                   >
                     الطلاب ({g.studentIds.length})
                   </button>
                   <button
                     onClick={() => handleOpenAttendance(g)}
-                    className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold transition flex items-center"
+                    className="px-3 py-1.5 bg-brand-50 hover:bg-brand-100 text-brand-700 rounded-xl text-xs font-bold transition flex items-center"
                   >
                     <CheckSquare className="w-3.5 h-3.5 ml-1 mr-1" />
                     {t('takeAttendanceBtn')}
@@ -492,10 +492,10 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
       {/* Tab 3: Attendance Manager */}
       {currentTab === 'attendance-manager' && (
         <div className="space-y-6">
-          <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="bg-surface p-6 rounded-3xl border border-surface-border shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h3 className="text-xl font-black text-slate-800">{t('navAttendance')}</h3>
-              <p className="text-xs text-slate-500 mt-1">
+              <h3 className="text-xl font-black text-forest">{t('navAttendance')}</h3>
+              <p className="text-xs text-forest-muted mt-1">
                 اختر أي مجموعة لتحضير الطلاب وتسجيل الواجب والملاحظات
               </p>
             </div>
@@ -503,15 +503,15 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {groups.map(g => (
-              <div key={g.id} className="p-5 bg-white rounded-3xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+              <div key={g.id} className="p-5 bg-surface rounded-3xl border border-surface-border shadow-sm flex flex-col justify-between">
                 <div>
-                  <span className="text-xs font-bold text-slate-500 font-mono">{g.day} • {g.time}</span>
-                  <h4 className="font-bold text-slate-900 text-sm mt-1">{g.name}</h4>
-                  <p className="text-xs text-slate-600 mt-1">{g.studentIds.length} طلاب مسجلين</p>
+                  <span className="text-xs font-bold text-forest-muted font-mono">{g.day} • {g.time}</span>
+                  <h4 className="font-bold text-forest text-sm mt-1">{g.name}</h4>
+                  <p className="text-xs text-forest-muted mt-1">{g.studentIds.length} طلاب مسجلين</p>
                 </div>
                 <button
                   onClick={() => handleOpenAttendance(g)}
-                  className="mt-4 w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center"
+                  className="mt-4 w-full py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-bold transition flex items-center justify-center"
                 >
                   <CheckSquare className="w-4 h-4 ml-1.5 mr-1.5" />
                   تحضير حصة المجموعة
@@ -525,16 +525,16 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
       {/* Tab 4: Make-up Requests & Vacant Slots */}
       {currentTab === 'makeup-requests' && (
         <div className="space-y-6">
-          <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="bg-surface p-6 rounded-3xl border border-surface-border shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h3 className="text-xl font-black text-slate-800">{t('navMakeups')}</h3>
-              <p className="text-xs text-slate-500 mt-1">
+              <h3 className="text-xl font-black text-forest">{t('navMakeups')}</h3>
+              <p className="text-xs text-forest-muted mt-1">
                 إدارة طلبات الحصص التعويضية والمواعيد البديلة الشاغرة لمس مارينا
               </p>
             </div>
             <button
               onClick={() => setShowAddSlotModal(true)}
-              className="px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-2xl text-xs shadow-md flex items-center transition"
+              className="px-4 py-2.5 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-2xl text-xs shadow-md flex items-center transition"
             >
               <PlusCircle className="w-4 h-4 ml-1.5 mr-1.5" />
               إضافة ميعاد تعويضي شاغر
@@ -542,13 +542,13 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
           </div>
 
           {/* Pending Makeups */}
-          <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
-            <div className="p-4 bg-slate-50 border-b border-slate-200 font-bold text-slate-800 text-sm">
+          <div className="bg-surface rounded-3xl border border-surface-border shadow-sm overflow-hidden">
+            <div className="p-4 bg-surface-alt border-b border-surface-border font-bold text-forest text-sm">
               طلبات أولياء الأمور للاعتذار والتعويض ({makeupRequests.length})
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-start text-xs">
-                <thead className="bg-slate-50/50 text-slate-600 font-bold border-b border-slate-200">
+                <thead className="bg-surface-alt/60 text-forest-muted font-bold border-b border-surface-border">
                   <tr>
                     <th className="p-3.5">{t('student')}</th>
                     <th className="p-3.5">{t('grade')}</th>
@@ -559,14 +559,14 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
                     <th className="p-3.5">{t('actions')}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-surface-border">
                   {makeupRequests.map(r => (
-                    <tr key={r.id} className="hover:bg-slate-50/80 transition">
-                      <td className="p-3.5 font-bold text-slate-900">{r.studentName}</td>
+                    <tr key={r.id} className="hover:bg-surface-alt/60 transition">
+                      <td className="p-3.5 font-bold text-forest">{r.studentName}</td>
                       <td className="p-3.5">{r.grade}</td>
                       <td className="p-3.5 font-semibold">{r.subject}</td>
-                      <td className="p-3.5 text-purple-700 font-bold">{r.targetTime}</td>
-                      <td className="p-3.5 text-slate-500 max-w-xs truncate">{r.reason}</td>
+                      <td className="p-3.5 text-brand-700 font-bold">{r.targetTime}</td>
+                      <td className="p-3.5 text-forest-muted max-w-xs truncate">{r.reason}</td>
                       <td className="p-3.5">
                         <span className={`px-2 py-0.5 rounded-full font-bold text-[11px] ${
                           r.status === 'approved' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
@@ -597,7 +597,7 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
                             </button>
                           </div>
                         ) : (
-                          <span className="text-[11px] text-slate-400 font-semibold">{r.coordinatorNote || 'معتمد'}</span>
+                          <span className="text-[11px] text-forest-muted font-semibold">{r.coordinatorNote || 'معتمد'}</span>
                         )}
                       </td>
                     </tr>
@@ -608,26 +608,26 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
           </div>
 
           {/* Available Slots */}
-          <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
-            <h4 className="font-extrabold text-slate-800 text-base">المواعيد التعويضية الشاغرة المتاحة للحجز</h4>
+          <div className="bg-surface rounded-3xl p-6 border border-surface-border shadow-sm space-y-4">
+            <h4 className="font-extrabold text-forest text-base">المواعيد التعويضية الشاغرة المتاحة للحجز</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
               {makeupSlots.map(s => (
-                <div key={s.id} className="p-4 rounded-2xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between">
+                <div key={s.id} className="p-4 rounded-2xl border border-surface-border bg-surface-alt/40 flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-purple-100 text-purple-800 uppercase">
+                      <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-brand-50 text-brand-800 uppercase">
                         {s.subject}
                       </span>
-                      <span className="text-xs font-bold text-slate-600 font-mono">{s.day} ({s.date})</span>
+                      <span className="text-xs font-bold text-forest-muted font-mono">{s.day} ({s.date})</span>
                     </div>
-                    <div className="font-bold text-slate-900 text-sm mt-2">{s.grade}</div>
-                    <div className="text-xs text-slate-600 font-mono mt-1">{s.time}</div>
-                    <div className="text-xs text-purple-700 font-bold mt-2">
+                    <div className="font-bold text-forest text-sm mt-2">{s.grade}</div>
+                    <div className="text-xs text-forest-muted font-mono mt-1">{s.time}</div>
+                    <div className="text-xs text-brand-700 font-bold mt-2">
                       {s.availableSeats} {t('seats')} متاحة من أصل {s.maxSeats}
                     </div>
-                    <div className="text-[11px] text-slate-500 mt-1">{s.note}</div>
+                    <div className="text-[11px] text-forest-muted mt-1">{s.note}</div>
                   </div>
-                  <div className="mt-3 pt-2 border-t border-slate-200 flex justify-end">
+                  <div className="mt-3 pt-2 border-t border-surface-border flex justify-end">
                     <button
                       onClick={() => {
                         if (window.confirm('هل تريد حذف هذا الموعد التعويضي؟')) {
@@ -650,17 +650,17 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
       {/* Tab 5: Payments Review */}
       {currentTab === 'payments-manager' && (
         <div className="space-y-6">
-          <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm">
-            <h3 className="text-xl font-black text-slate-800">{t('navPayments')}</h3>
-            <p className="text-xs text-slate-500 mt-1">
+          <div className="bg-surface p-6 rounded-3xl border border-surface-border shadow-sm">
+            <h3 className="text-xl font-black text-forest">{t('navPayments')}</h3>
+            <p className="text-xs text-forest-muted mt-1">
               مراجعة إيصالات التحويل وأرقام المعاملات الصادرة من أولياء الأمور واعتمادها
             </p>
           </div>
 
-          <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+          <div className="bg-surface rounded-3xl border border-surface-border shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-start text-xs">
-                <thead className="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                <thead className="bg-surface-alt text-forest-muted font-bold border-b border-surface-border">
                   <tr>
                     <th className="p-3.5">{t('student')}</th>
                     <th className="p-3.5">{t('month')}</th>
@@ -671,12 +671,12 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
                     <th className="p-3.5">{t('actions')}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-surface-border">
                   {payments.map(p => (
-                    <tr key={p.id} className="hover:bg-slate-50/80 transition">
-                      <td className="p-3.5 font-bold text-slate-900">{p.studentName}</td>
+                    <tr key={p.id} className="hover:bg-surface-alt/60 transition">
+                      <td className="p-3.5 font-bold text-forest">{p.studentName}</td>
                       <td className="p-3.5">{p.month}</td>
-                      <td className="p-3.5 font-bold font-mono text-slate-900">{p.amount} {t('currency')}</td>
+                      <td className="p-3.5 font-bold font-mono text-forest">{p.amount} {t('currency')}</td>
                       <td className="p-3.5 font-semibold">{p.method}</td>
                       <td className="p-3.5 font-mono">{p.referenceNumber}</td>
                       <td className="p-3.5">
@@ -698,7 +698,7 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
                             {t('confirmReceipt')}
                           </button>
                         ) : (
-                          <span className="text-[11px] text-emerald-600 font-bold">معتمد ✓</span>
+                          <span className="text-[11px] text-emerald-700 font-bold">معتمد ✓</span>
                         )}
                       </td>
                     </tr>
@@ -712,10 +712,10 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
 
       {/* Tab 6: Live Parent Messages Center */}
       {currentTab === 'messages-center' && (
-        <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden grid grid-cols-1 md:grid-cols-3 min-h-[500px]">
+        <div className="bg-surface rounded-3xl border border-surface-border shadow-sm overflow-hidden grid grid-cols-1 md:grid-cols-3 min-h-[500px]">
           {/* Students Chat List */}
-          <div className="border-b md:border-b-0 md:border-l border-slate-200 p-4 space-y-2 bg-slate-50/50">
-            <h4 className="font-extrabold text-slate-800 text-sm mb-3">محادثات أولياء الأمور</h4>
+          <div className="border-b md:border-b-0 md:border-l border-surface-border p-4 space-y-2 bg-surface-alt/50">
+            <h4 className="font-extrabold text-forest text-sm mb-3">محادثات أولياء الأمور</h4>
             <div className="space-y-1.5">
               {students.map(st => {
                 const unread = messages.filter(m => m.studentId === st.id && !m.read && m.sender === 'parent').length;
@@ -728,13 +728,13 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
                     }}
                     className={`p-3 rounded-2xl cursor-pointer transition flex items-center justify-between ${
                       selectedChatStudentId === st.id
-                        ? 'bg-indigo-600 text-white shadow-md'
-                        : 'bg-white hover:bg-slate-100 text-slate-800 border border-slate-200/60'
+                        ? 'bg-brand-500 text-white shadow-md'
+                        : 'bg-surface hover:bg-surface-alt text-forest border border-surface-border'
                     }`}
                   >
                     <div>
                       <div className="font-bold text-xs">{st.studentName}</div>
-                      <div className={`text-[10px] ${selectedChatStudentId === st.id ? 'text-indigo-200' : 'text-slate-500'}`}>
+                      <div className={`text-[10px] ${selectedChatStudentId === st.id ? 'text-white/80' : 'text-forest-muted'}`}>
                         {st.name}
                       </div>
                     </div>
@@ -750,7 +750,7 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
           </div>
 
           {/* Chat Messages Panel */}
-          <div className="md:col-span-2 flex flex-col justify-between p-4 bg-white">
+          <div className="md:col-span-2 flex flex-col justify-between p-4 bg-surface">
             <div className="space-y-3 overflow-y-auto max-h-[420px] p-2">
               {messages.filter(m => m.studentId === selectedChatStudentId).length > 0 ? (
                 messages.filter(m => m.studentId === selectedChatStudentId).map(m => (
@@ -763,8 +763,8 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
                     <div
                       className={`max-w-md p-3.5 rounded-2xl text-xs leading-relaxed ${
                         m.sender === 'coordinator'
-                          ? 'bg-indigo-600 text-white rounded-br-none shadow-sm'
-                          : 'bg-slate-100 text-slate-800 rounded-bl-none border border-slate-200'
+                          ? 'bg-brand-500 text-white rounded-br-none shadow-sm'
+                          : 'bg-surface-alt text-forest rounded-bl-none border border-surface-border'
                       }`}
                     >
                       <span className="text-[10px] font-bold block mb-1 opacity-75">
@@ -778,24 +778,24 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
                   </div>
                 ))
               ) : (
-                <div className="p-12 text-center text-slate-400 text-xs">
+                <div className="p-12 text-center text-forest-muted text-xs">
                   لا توجد رسائل سابقة. اكتب رداً للبدء في التواصل.
                 </div>
               )}
             </div>
 
             {/* Chat Input */}
-            <form onSubmit={handleSendChat} className="pt-3 border-t border-slate-100 flex gap-2">
+            <form onSubmit={handleSendChat} className="pt-3 border-t border-surface-border flex gap-2">
               <input
                 type="text"
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
                 placeholder="اكتب ردك لولي الأمر هنا..."
-                className="flex-1 p-3 rounded-2xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="flex-1 p-3 rounded-2xl border border-surface-border text-xs text-forest focus:outline-none focus:ring-2 focus:ring-brand-500"
               />
               <button
                 type="submit"
-                className="px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-xs shadow-md transition flex items-center"
+                className="px-5 py-3 bg-brand-500 hover:bg-brand-600 text-white rounded-2xl font-bold text-xs shadow-md transition flex items-center"
               >
                 <Send className="w-4 h-4 ml-1 mr-1" />
                 <span>{t('send')}</span>
@@ -808,32 +808,32 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
       {/* Tab 7: Registrations Manager */}
       {currentTab === 'registrations-manager' && (
         <div className="space-y-6">
-          <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm">
-            <h3 className="text-xl font-black text-slate-800">{t('navRegistrations')}</h3>
-            <p className="text-xs text-slate-500 mt-1">
+          <div className="bg-surface p-6 rounded-3xl border border-surface-border shadow-sm">
+            <h3 className="text-xl font-black text-forest">{t('navRegistrations')}</h3>
+            <p className="text-xs text-forest-muted mt-1">
               طلبات الالتحاق الجديدة المسجلة عبر الموقع لمتابعتها وتسكينها
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {registrations.map(reg => (
-              <div key={reg.id} className="p-5 bg-white rounded-3xl border border-slate-200/80 shadow-sm space-y-3">
+              <div key={reg.id} className="p-5 bg-surface rounded-3xl border border-surface-border shadow-sm space-y-3">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-extrabold text-slate-900 text-sm">{reg.studentName}</h4>
+                  <h4 className="font-extrabold text-forest text-sm">{reg.studentName}</h4>
                   <span className={`px-2 py-0.5 rounded-full font-bold text-[11px] ${
                     reg.status === 'accepted' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
                   }`}>
                     {reg.status}
                   </span>
                 </div>
-                <div className="text-xs text-slate-600 space-y-1">
-                  <div>ولي الأمر: <strong>{reg.parentName}</strong></div>
+                <div className="text-xs text-forest-muted space-y-1">
+                  <div>ولي الأمر: <strong className="text-forest">{reg.parentName}</strong></div>
                   <div>الهاتف: <span className="font-mono">{reg.phone}</span></div>
-                  <div>المرحلة: <strong className="text-indigo-700">{reg.grade}</strong></div>
+                  <div>المرحلة: <strong className="text-brand-700">{reg.grade}</strong></div>
                   <div>المواد: {reg.subjects.join(' + ')}</div>
-                  <div className="text-slate-500 text-[11px] mt-1">{reg.notes}</div>
+                  <div className="text-forest-muted text-[11px] mt-1">{reg.notes}</div>
                 </div>
-                <div className="pt-2 border-t border-slate-100 flex justify-end space-x-2 space-x-reverse">
+                <div className="pt-2 border-t border-surface-border flex justify-end space-x-2 space-x-reverse">
                   <button
                     onClick={() => {
                       updateRegistrationStatus(reg.id, 'accepted', 'تم قبول الطالب والتواصل لتحديد المجموعة');
@@ -859,34 +859,34 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
         >
           <form onSubmit={handleCreateGroup} className="space-y-4 text-start">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">اسم المجموعة:</label>
+              <label className="block text-xs font-bold text-forest mb-1">اسم المجموعة:</label>
               <input
                 type="text"
                 placeholder="مثال: ماث - رابعة ابتدائي (مجموعة الأحد)"
                 value={newGroupForm.name}
                 onChange={(e) => setNewGroupForm({ ...newGroupForm, name: e.target.value })}
                 required
-                className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-bold"
+                className="w-full p-2.5 rounded-xl border border-surface-border text-xs font-bold text-forest focus:outline-none focus:ring-2 focus:ring-brand-500"
               />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">المادة:</label>
+                <label className="block text-xs font-bold text-forest mb-1">المادة:</label>
                 <select
                   value={newGroupForm.subject}
                   onChange={(e) => setNewGroupForm({ ...newGroupForm, subject: e.target.value })}
-                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-bold"
+                  className="w-full p-2.5 rounded-xl border border-surface-border text-xs font-bold text-forest focus:outline-none focus:ring-2 focus:ring-brand-500"
                 >
                   <option value="math">Math (ماث)</option>
                   <option value="english">English (لغة إنجليزية)</option>
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">{t('grade')}:</label>
+                <label className="block text-xs font-bold text-forest mb-1">{t('grade')}:</label>
                 <select
                   value={newGroupForm.grade}
                   onChange={(e) => setNewGroupForm({ ...newGroupForm, grade: e.target.value })}
-                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-bold"
+                  className="w-full p-2.5 rounded-xl border border-surface-border text-xs font-bold text-forest focus:outline-none focus:ring-2 focus:ring-brand-500"
                 >
                   <option value="KG 1">KG 1</option>
                   <option value="KG 2">KG 2</option>
@@ -901,11 +901,11 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">اليوم:</label>
+                <label className="block text-xs font-bold text-forest mb-1">اليوم:</label>
                 <select
                   value={newGroupForm.day}
                   onChange={(e) => setNewGroupForm({ ...newGroupForm, day: e.target.value })}
-                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-bold"
+                  className="w-full p-2.5 rounded-xl border border-surface-border text-xs font-bold text-forest focus:outline-none focus:ring-2 focus:ring-brand-500"
                 >
                   <option value="السبت">السبت</option>
                   <option value="الأحد">الأحد</option>
@@ -916,35 +916,35 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">الوقت:</label>
+                <label className="block text-xs font-bold text-forest mb-1">الوقت:</label>
                 <input
                   type="text"
                   value={newGroupForm.time}
                   onChange={(e) => setNewGroupForm({ ...newGroupForm, time: e.target.value })}
                   required
-                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-mono font-bold"
+                  className="w-full p-2.5 rounded-xl border border-surface-border text-xs font-mono font-bold text-forest focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">السعة القصوى (طلاب):</label>
+                <label className="block text-xs font-bold text-forest mb-1">السعة القصوى (طلاب):</label>
                 <input
                   type="number"
                   value={newGroupForm.maxCapacity}
                   onChange={(e) => setNewGroupForm({ ...newGroupForm, maxCapacity: e.target.value })}
                   required
-                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-mono"
+                  className="w-full p-2.5 rounded-xl border border-surface-border text-xs font-mono text-forest focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">الاشتراك الشهري (ج):</label>
+                <label className="block text-xs font-bold text-forest mb-1">الاشتراك الشهري (ج):</label>
                 <input
                   type="number"
                   value={newGroupForm.monthlyFee}
                   onChange={(e) => setNewGroupForm({ ...newGroupForm, monthlyFee: e.target.value })}
                   required
-                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-mono font-bold"
+                  className="w-full p-2.5 rounded-xl border border-surface-border text-xs font-mono font-bold text-forest focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
               </div>
             </div>
@@ -952,13 +952,13 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
               <button
                 type="button"
                 onClick={() => setShowAddGroupModal(false)}
-                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold"
+                className="px-4 py-2 bg-surface-alt hover:bg-surface-border text-forest rounded-xl text-xs font-bold"
               >
                 {t('cancel')}
               </button>
               <button
                 type="submit"
-                className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-md"
+                className="px-5 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-bold shadow-md"
               >
                 إنشاء المجموعة
               </button>
@@ -977,22 +977,22 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
           <form onSubmit={handleCreateSlot} className="space-y-4 text-start">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">المادة:</label>
+                <label className="block text-xs font-bold text-forest mb-1">المادة:</label>
                 <select
                   value={newSlotForm.subject}
                   onChange={(e) => setNewSlotForm({ ...newSlotForm, subject: e.target.value })}
-                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-bold"
+                  className="w-full p-2.5 rounded-xl border border-surface-border text-xs font-bold text-forest focus:outline-none focus:ring-2 focus:ring-brand-500"
                 >
                   <option value="math">Math (ماث)</option>
                   <option value="english">English (إنجليزي)</option>
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">{t('grade')}:</label>
+                <label className="block text-xs font-bold text-forest mb-1">{t('grade')}:</label>
                 <select
                   value={newSlotForm.grade}
                   onChange={(e) => setNewSlotForm({ ...newSlotForm, grade: e.target.value })}
-                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-bold"
+                  className="w-full p-2.5 rounded-xl border border-surface-border text-xs font-bold text-forest focus:outline-none focus:ring-2 focus:ring-brand-500"
                 >
                   <option value="KG 1">KG 1</option>
                   <option value="KG 2">KG 2</option>
@@ -1007,11 +1007,11 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">اليوم:</label>
+                <label className="block text-xs font-bold text-forest mb-1">اليوم:</label>
                 <select
                   value={newSlotForm.day}
                   onChange={(e) => setNewSlotForm({ ...newSlotForm, day: e.target.value })}
-                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-bold"
+                  className="w-full p-2.5 rounded-xl border border-surface-border text-xs font-bold text-forest focus:outline-none focus:ring-2 focus:ring-brand-500"
                 >
                   <option value="السبت">السبت</option>
                   <option value="الأحد">الأحد</option>
@@ -1022,59 +1022,59 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">{t('date')}:</label>
+                <label className="block text-xs font-bold text-forest mb-1">{t('date')}:</label>
                 <input
                   type="date"
                   value={newSlotForm.date}
                   onChange={(e) => setNewSlotForm({ ...newSlotForm, date: e.target.value })}
                   required
-                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-mono"
+                  className="w-full p-2.5 rounded-xl border border-surface-border text-xs font-mono text-forest focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">الوقت:</label>
+                <label className="block text-xs font-bold text-forest mb-1">الوقت:</label>
                 <input
                   type="text"
                   value={newSlotForm.time}
                   onChange={(e) => setNewSlotForm({ ...newSlotForm, time: e.target.value })}
                   placeholder="05:00 م - 06:30 م"
                   required
-                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-mono font-bold"
+                  className="w-full p-2.5 rounded-xl border border-surface-border text-xs font-mono font-bold text-forest focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">المقاعد المتاحة:</label>
+                <label className="block text-xs font-bold text-forest mb-1">المقاعد المتاحة:</label>
                 <input
                   type="number"
                   value={newSlotForm.maxSeats}
                   onChange={(e) => setNewSlotForm({ ...newSlotForm, maxSeats: e.target.value })}
                   required
-                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-mono"
+                  className="w-full p-2.5 rounded-xl border border-surface-border text-xs font-mono text-forest focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">تفاصيل وملاحظة الحصة:</label>
+              <label className="block text-xs font-bold text-forest mb-1">تفاصيل وملاحظة الحصة:</label>
               <input
                 type="text"
                 value={newSlotForm.note}
                 onChange={(e) => setNewSlotForm({ ...newSlotForm, note: e.target.value })}
-                className="w-full p-2.5 rounded-xl border border-slate-200 text-xs"
+                className="w-full p-2.5 rounded-xl border border-surface-border text-xs text-forest focus:outline-none focus:ring-2 focus:ring-brand-500"
               />
             </div>
             <div className="pt-3 flex justify-end space-x-2 space-x-reverse">
               <button
                 type="button"
                 onClick={() => setShowAddSlotModal(false)}
-                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold"
+                className="px-4 py-2 bg-surface-alt hover:bg-surface-border text-forest rounded-xl text-xs font-bold"
               >
                 {t('cancel')}
               </button>
               <button
                 type="submit"
-                className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold shadow-md"
+                className="px-5 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-bold shadow-md"
               >
                 إضافة الموعد
               </button>
@@ -1093,19 +1093,19 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
         >
           <form onSubmit={handleSaveAttendance} className="space-y-4 text-start">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">عنوان / موضوع الدرس:</label>
+              <label className="block text-xs font-bold text-forest mb-1">عنوان / موضوع الدرس:</label>
               <input
                 type="text"
                 value={sessionTopic}
                 onChange={(e) => setSessionTopic(e.target.value)}
                 required
-                className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-bold"
+                className="w-full p-2.5 rounded-xl border border-surface-border text-xs font-bold text-forest focus:outline-none focus:ring-2 focus:ring-brand-500"
               />
             </div>
 
-            <div className="border border-slate-200 rounded-2xl overflow-hidden">
+            <div className="border border-surface-border rounded-2xl overflow-hidden">
               <table className="w-full text-start text-xs">
-                <thead className="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                <thead className="bg-surface-alt text-forest-muted font-bold border-b border-surface-border">
                   <tr>
                     <th className="p-3">اسم الطالب</th>
                     <th className="p-3">{t('status')}</th>
@@ -1113,10 +1113,10 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
                     <th className="p-3">{t('notes')}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-surface-border">
                   {attendanceSheet.map((item, idx) => (
-                    <tr key={item.studentId} className="hover:bg-slate-50/60">
-                      <td className="p-3 font-bold text-slate-900">{item.studentName}</td>
+                    <tr key={item.studentId} className="hover:bg-surface-alt/60">
+                      <td className="p-3 font-bold text-forest">{item.studentName}</td>
                       <td className="p-3">
                         <select
                           value={item.status}
@@ -1125,7 +1125,7 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
                             updated[idx].status = e.target.value;
                             setAttendanceSheet(updated);
                           }}
-                          className="p-1.5 rounded-lg border border-slate-200 text-xs font-bold"
+                          className="p-1.5 rounded-lg border border-surface-border text-xs font-bold text-forest focus:outline-none focus:ring-2 focus:ring-brand-500"
                         >
                           <option value="attended">حاضر ✓</option>
                           <option value="absent">غائب ✕</option>
@@ -1140,9 +1140,9 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
                             updated[idx].homeworkDone = e.target.checked;
                             setAttendanceSheet(updated);
                           }}
-                          className="rounded text-indigo-600 ml-2 mr-2"
+                          className="rounded text-brand-600 focus:ring-brand-500 ml-2 mr-2"
                         />
-                        <span className="text-xs font-semibold">{item.homeworkDone ? 'تم التسليم' : 'لم يسلم'}</span>
+                        <span className="text-xs font-semibold text-forest">{item.homeworkDone ? 'تم التسليم' : 'لم يسلم'}</span>
                       </td>
                       <td className="p-3">
                         <input
@@ -1154,7 +1154,7 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
                             setAttendanceSheet(updated);
                           }}
                           placeholder="ملاحظات تفاعل الطالب..."
-                          className="w-full p-1.5 rounded-lg border border-slate-200 text-xs"
+                          className="w-full p-1.5 rounded-lg border border-surface-border text-xs text-forest focus:outline-none focus:ring-2 focus:ring-brand-500"
                         />
                       </td>
                     </tr>
@@ -1167,13 +1167,13 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
               <button
                 type="button"
                 onClick={() => setActiveAttendanceGroup(null)}
-                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold"
+                className="px-4 py-2 bg-surface-alt hover:bg-surface-border text-forest rounded-xl text-xs font-bold"
               >
                 {t('cancel')}
               </button>
               <button
                 type="submit"
-                className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-md"
+                className="px-6 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-bold shadow-md"
               >
                 حفظ كشف الحضور
               </button>
@@ -1190,17 +1190,17 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
           title={`إدارة طلاب مجموعة: ${activeGroupDetails.name}`}
         >
           <div className="space-y-4 text-start">
-            <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 text-xs space-y-1">
+            <div className="p-3 bg-surface-alt rounded-2xl border border-surface-border text-xs text-forest space-y-1">
               <div>الموعد: <strong>{activeGroupDetails.day} ({activeGroupDetails.time})</strong></div>
               <div>السعة: <strong>{activeGroupDetails.studentIds.length} / {activeGroupDetails.maxCapacity}</strong></div>
             </div>
 
             {/* Assign New Student Dropdown */}
-            <div className="p-3 bg-indigo-50/50 rounded-2xl border border-indigo-100 flex items-center gap-2">
+            <div className="p-3 bg-brand-50/50 rounded-2xl border border-brand-200 flex items-center gap-2">
               <select
                 value={selectedStudentToAssign}
                 onChange={(e) => setSelectedStudentToAssign(e.target.value)}
-                className="flex-1 p-2 rounded-xl border border-slate-200 text-xs font-bold"
+                className="flex-1 p-2 rounded-xl border border-surface-border text-xs font-bold text-forest focus:outline-none focus:ring-2 focus:ring-brand-500"
               >
                 <option value="">-- اختر طالباً لتسكينه هنا --</option>
                 {students
@@ -1219,7 +1219,7 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
                     setSelectedStudentToAssign('');
                   }
                 }}
-                className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold"
+                className="px-3 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-bold"
               >
                 تسكين +
               </button>
@@ -1227,12 +1227,12 @@ export const CoordinatorPortal = ({ currentTab, onNavigate }) => {
 
             {/* Currently Enrolled Students */}
             <div className="space-y-2 max-h-60 overflow-y-auto">
-              <h5 className="font-bold text-slate-800 text-xs">الطلاب المقيدين حالياً ({activeGroupDetails.studentIds.length}):</h5>
+              <h5 className="font-bold text-forest text-xs">الطلاب المقيدين حالياً ({activeGroupDetails.studentIds.length}):</h5>
               {students.filter(s => activeGroupDetails.studentIds.includes(s.id)).map(st => (
-                <div key={st.id} className="p-3 rounded-xl border border-slate-200 flex items-center justify-between">
+                <div key={st.id} className="p-3 rounded-xl border border-surface-border flex items-center justify-between">
                   <div>
-                    <div className="font-bold text-slate-900 text-xs">{st.studentName}</div>
-                    <div className="text-[10px] text-slate-500">{st.name} • {st.phone}</div>
+                    <div className="font-bold text-forest text-xs">{st.studentName}</div>
+                    <div className="text-[10px] text-forest-muted">{st.name} • {st.phone}</div>
                   </div>
                   <button
                     onClick={() => {

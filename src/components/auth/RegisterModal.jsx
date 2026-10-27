@@ -50,7 +50,7 @@ export const RegisterModal = ({ isOpen, onClose, onOpenLogin }) => {
     <Modal isOpen={isOpen} onClose={onClose} title={t('register')}>
       <form onSubmit={handleSubmit} className="space-y-4 text-start">
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">
+          <label className="block text-xs font-bold text-forest mb-1">
             اسم الطالب أو الطفل بالكامل:
           </label>
           <input
@@ -59,12 +59,12 @@ export const RegisterModal = ({ isOpen, onClose, onOpenLogin }) => {
             onChange={(e) => setStudentName(e.target.value)}
             placeholder="مثال: يوسف أحمد إبراهيم"
             required
-            className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full p-2.5 rounded-xl border border-surface-border text-xs font-bold text-forest bg-surface focus:outline-none focus:ring-2 focus:ring-brand-500"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">
+          <label className="block text-xs font-bold text-forest mb-1">
             اسم ولي الأمر:
           </label>
           <input
@@ -73,13 +73,13 @@ export const RegisterModal = ({ isOpen, onClose, onOpenLogin }) => {
             onChange={(e) => setParentName(e.target.value)}
             placeholder="مثال: أحمد إبراهيم"
             required
-            className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full p-2.5 rounded-xl border border-surface-border text-xs font-bold text-forest bg-surface focus:outline-none focus:ring-2 focus:ring-brand-500"
           />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">
+            <label className="block text-xs font-bold text-forest mb-1">
               {t('phone')}:
             </label>
             <input
@@ -88,18 +88,18 @@ export const RegisterModal = ({ isOpen, onClose, onOpenLogin }) => {
               onChange={(e) => setPhone(e.target.value)}
               placeholder="010xxxxxxxx"
               required
-              className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-mono text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full p-2.5 rounded-xl border border-surface-border text-xs font-mono text-forest bg-surface focus:outline-none focus:ring-2 focus:ring-brand-500"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">
+            <label className="block text-xs font-bold text-forest mb-1">
               {t('grade')}:
             </label>
             <select
               value={grade}
               onChange={(e) => setGrade(e.target.value)}
-              className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full p-2.5 rounded-xl border border-surface-border text-xs font-bold text-forest bg-surface focus:outline-none focus:ring-2 focus:ring-brand-500"
             >
               <option value="KG 1">رياض أطفال (KG 1)</option>
               <option value="KG 2">رياض أطفال (KG 2)</option>
@@ -114,32 +114,32 @@ export const RegisterModal = ({ isOpen, onClose, onOpenLogin }) => {
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">
+          <label className="block text-xs font-bold text-forest mb-1">
             المواد المراد التسجيل بها مع مس مارينا:
           </label>
           <div className="grid grid-cols-2 gap-3 pt-1">
-            <label className={`p-3 rounded-xl border flex items-center cursor-pointer transition ${hasMath ? 'bg-indigo-50/60 border-indigo-200 text-indigo-900' : 'bg-slate-50 border-slate-200 text-slate-700'}`}>
+            <label className={`p-3 rounded-xl border flex items-center cursor-pointer transition ${hasMath ? 'bg-brand-50/70 border-brand-300 text-brand-900' : 'bg-surface-alt border-surface-border text-forest'}`}>
               <input
                 type="checkbox"
                 checked={hasMath}
                 onChange={(e) => setHasMath(e.target.checked)}
-                className="ml-2 mr-2 rounded text-indigo-600 focus:ring-indigo-500"
+                className="ml-2 mr-2 rounded text-brand-600 focus:ring-brand-500"
               />
               <div>
                 <span className="text-xs font-bold block">{t('math')}</span>
-                <span className="text-[10px] text-slate-500">تأسيس وحساب ذهني ومنهج</span>
+                <span className="text-[10px] text-forest-muted">تأسيس وحساب ذهني ومنهج</span>
               </div>
             </label>
-            <label className={`p-3 rounded-xl border flex items-center cursor-pointer transition ${hasEng ? 'bg-indigo-50/60 border-indigo-200 text-indigo-900' : 'bg-slate-50 border-slate-200 text-slate-700'}`}>
+            <label className={`p-3 rounded-xl border flex items-center cursor-pointer transition ${hasEng ? 'bg-brand-50/70 border-brand-300 text-brand-900' : 'bg-surface-alt border-surface-border text-forest'}`}>
               <input
                 type="checkbox"
                 checked={hasEng}
                 onChange={(e) => setHasEng(e.target.checked)}
-                className="ml-2 mr-2 rounded text-indigo-600 focus:ring-indigo-500"
+                className="ml-2 mr-2 rounded text-brand-600 focus:ring-brand-500"
               />
               <div>
                 <span className="text-xs font-bold block">{t('english')}</span>
-                <span className="text-[10px] text-slate-500">Phonics، محادثة ومنهج</span>
+                <span className="text-[10px] text-forest-muted">Phonics، محادثة ومنهج</span>
               </div>
             </label>
           </div>
@@ -147,13 +147,13 @@ export const RegisterModal = ({ isOpen, onClose, onOpenLogin }) => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">
+            <label className="block text-xs font-bold text-forest mb-1">
               اليوم المفضل للحصة (إن وجد):
             </label>
             <select
               value={preferredDay}
               onChange={(e) => setPreferredDay(e.target.value)}
-              className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full p-2.5 rounded-xl border border-surface-border text-xs font-bold text-forest bg-surface focus:outline-none focus:ring-2 focus:ring-brand-500"
             >
               <option value="السبت">السبت (Saturday)</option>
               <option value="الأحد">الأحد (Sunday)</option>
@@ -166,7 +166,7 @@ export const RegisterModal = ({ isOpen, onClose, onOpenLogin }) => {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">
+            <label className="block text-xs font-bold text-forest mb-1">
               {t('password')}:
             </label>
             <input
@@ -174,19 +174,19 @@ export const RegisterModal = ({ isOpen, onClose, onOpenLogin }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-mono text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full p-2.5 rounded-xl border border-surface-border text-xs font-mono text-forest bg-surface focus:outline-none focus:ring-2 focus:ring-brand-500"
             />
           </div>
         </div>
 
-        <div className="pt-4 flex justify-between items-center border-t border-slate-100">
+        <div className="pt-4 flex justify-between items-center border-t border-surface-border">
           <button
             type="button"
             onClick={() => {
               onClose();
               onOpenLogin();
             }}
-            className="text-xs font-bold text-indigo-600 hover:underline"
+            className="text-xs font-bold text-brand-600 hover:text-brand-700 hover:underline"
           >
             {t('login')}
           </button>
@@ -194,13 +194,13 @@ export const RegisterModal = ({ isOpen, onClose, onOpenLogin }) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold hover:bg-slate-200 transition"
+              className="px-4 py-2 bg-surface-alt text-forest-muted rounded-xl text-xs font-bold hover:bg-surface hover:text-forest transition border border-surface-border"
             >
               {t('cancel')}
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-md transition"
+              className="px-6 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-bold shadow-md shadow-brand-500/20 transition"
             >
               {t('register')}
             </button>

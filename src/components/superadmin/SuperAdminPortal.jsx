@@ -14,7 +14,16 @@ import {
   Settings,
   CreditCard,
   Building,
-  Smartphone
+  Smartphone,
+  Calendar,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
+  ArrowUpRight,
+  Activity,
+  MapPin,
+  Crown,
+  Sparkles
 } from 'lucide-react';
 import { Modal } from '../common/Modal';
 
@@ -31,6 +40,25 @@ export const SuperAdminPortal = ({ currentTab, onNavigate }) => {
   // Selected student for editing
   const [editingStudent, setEditingStudent] = useState(null);
   const [editFormData, setEditFormData] = useState({ studentName: '', name: '', phone: '', grade: '', password: '' });
+
+  // Dashboard interactive state: day filter & add-group modal
+  const [selectedDayFilter, setSelectedDayFilter] = useState('today');
+  const [showAddGroupModal, setShowAddGroupModal] = useState(false);
+  const [newGroupForm, setNewGroupForm] = useState({
+    name: '',
+    nameEn: '',
+    subject: 'math',
+    grade: 'Primary 1 (الصف الأول)',
+    stage: 'primary',
+    day: 'السبت',
+    dayEn: 'Saturday',
+    time: '04:00 م - 05:30 م',
+    timeEn: '04:00 PM - 05:30 PM',
+    maxCapacity: 12,
+    monthlyFee: 450,
+    location: 'قاعة 1 (السنتر الرئيسي)',
+    locationEn: 'Hall 1 (Main Center)'
+  });
 
   // Payment settings state
   const [settingsForm, setSettingsForm] = useState({
@@ -119,72 +147,139 @@ export const SuperAdminPortal = ({ currentTab, onNavigate }) => {
     addToast('تم حفظ وتحديث إعدادات وسائل الدفع بنجاح', 'success');
   };
 
+  // Day filter logic
+  const daysMapAr = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+  const daysMapEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const todayIndex = new Date().getDay();
+  const todayNameAr = daysMapAr[todayIndex];
+  const todayNameEn = daysMapEn[todayIndex];
+
+  const pendingPaymentsCount = payments.filter(p => p.status === 'pending_review').length;
+  const pendingMakeupCount = data.makeupRequests ? data.makeupRequests.filter(r => r.status === 'pending').length : 0;
+  const unreadInquiriesCount = data.messages ? data.messages.filter(m => !m.read && m.sender === 'parent').length : 0;
+
+  const filteredScheduleGroups = groups.filter(g => {
+    if (selectedDayFilter === 'all') return true;
+    if (selectedDayFilter === 'today') {
+      return g.day === todayNameAr || g.dayEn === todayNameEn;
+    }
+    return g.day === selectedDayFilter || g.dayEn === selectedDayFilter;
+  });
+
+  const formattedTodayDate = new Date().toLocaleDateString(isRTL ? 'ar-EG' : 'en-US', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+
+  const handleCreateGroup = (e) => {
+    e.preventDefault();
+    if (!newGroupForm.name) return;
+    addGroup({
+      ...newGroupForm,
+      subjectName: newGroupForm.subject === 'math' ? 'Math (ماث)' : 'English (لغة إنجليزية)',
+      subjectNameEn: newGroupForm.subject === 'math' ? 'Math' : 'English',
+      teacher: 'مس مارينا',
+      studentIds: []
+    });
+    addToast(isRTL ? 'تم إضافة المجموعة والموعد بنجاح' : 'New class group added successfully', 'success');
+    setShowAddGroupModal(false);
+    setNewGroupForm({
+      name: '',
+      nameEn: '',
+      subject: 'math',
+      grade: 'Primary 1 (الصف الأول)',
+      stage: 'primary',
+      day: 'السبت',
+      dayEn: 'Saturday',
+      time: '04:00 م - 05:30 م',
+      timeEn: '04:00 PM - 05:30 PM',
+      maxCapacity: 12,
+      monthlyFee: 450,
+      location: 'قاعة 1 (السنتر الرئيسي)',
+      locationEn: 'Hall 1 (Main Center)'
+    });
+  };
+
   return (
     <div className="space-y-6 pb-20">
-      {/* Top Super Admin Banner */}
-      <div className="bg-gradient-to-r from-purple-800 via-indigo-900 to-slate-900 rounded-3xl p-6 md:p-8 text-white shadow-xl relative overflow-hidden">
-        <div className="absolute -left-10 -bottom-10 w-48 h-48 bg-purple-500/20 rounded-full blur-2xl pointer-events-none" />
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="flex items-center space-x-4 space-x-reverse">
-            <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-tr from-amber-400 to-yellow-500 flex items-center justify-center text-3xl md:text-4xl shadow-lg ring-4 ring-white/10 shrink-0">
-              👩‍🏫
+      {/* ZONE 1 & 2: Integrated Executive Command Header & Sub-Navigation Strip */}
+      <div className="bg-surface rounded-2xl border border-surface-border shadow-warm-xs overflow-hidden">
+        {/* Top Command Strip */}
+        <div className="p-5 sm:p-6 pb-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          {/* Identity & Status */}
+          <div className="flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-xl bg-brand-500 text-white flex items-center justify-center shadow-xs shrink-0 border border-brand-400">
+              <Crown className="w-6 h-6 text-gold-300" />
             </div>
             <div>
-              <div className="flex items-center space-x-2 space-x-reverse flex-wrap">
-                <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h2 className="text-lg sm:text-xl font-black text-forest tracking-tight">
                   {t('superAdminTitle')}
                 </h2>
-                <span className="bg-amber-400 text-slate-950 text-xs px-3 py-1 rounded-full font-black">
-                  {t('superAdminBadge')}
+                <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-md bg-gold-50 text-gold-800 border border-gold-200">
+                  <Crown className="w-3.5 h-3.5 text-gold-600 inline shrink-0" />
+                  <span>{t('superAdminBadge')}</span>
                 </span>
               </div>
-              <p className="text-purple-200 text-sm mt-1 font-medium">
-                {t('centerTagline')}
-              </p>
-              <div className="flex items-center space-x-3 space-x-reverse mt-2 text-xs flex-wrap gap-1">
-                <span className="bg-white/10 text-purple-200 px-3 py-1 rounded-lg">
-                  {t('mathStudents')}: <strong className="text-amber-300 font-bold">{mathStudents}</strong>
-                </span>
-                <span className="bg-white/10 text-purple-200 px-3 py-1 rounded-lg">
-                  {t('engStudents')}: <strong className="text-pink-300 font-bold">{engStudents}</strong>
-                </span>
-                <span className="bg-white/10 text-purple-200 px-3 py-1 rounded-lg">
-                  {t('groupsCount')}: <strong className="text-emerald-300 font-bold">{groups.length}</strong>
-                </span>
+              <div className="flex items-center gap-2 text-xs text-forest-muted mt-1">
+                <Calendar className="w-3.5 h-3.5 text-brand-500 shrink-0" />
+                <span className="font-semibold text-forest">{formattedTodayDate}</span>
+                <span className="text-surface-border">•</span>
+                <span>{t('brandSubtitle')}</span>
               </div>
             </div>
           </div>
 
-          {/* Quick Financial Summary */}
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 text-start min-w-[200px]">
-            <span className="text-xs text-purple-200 font-bold block">
-              {t('collectedRevenue')}:
-            </span>
-            <div className="text-2xl md:text-3xl font-black text-amber-300 font-mono mt-1">
-              {totalRevenue.toLocaleString()} {t('currency')}
-            </div>
-            <span className="text-[11px] text-purple-300 mt-1 block">
-              {t('pendingRevenue')}: {pendingRevenue} {t('currency')}
-            </span>
+          {/* Action Hub (Strict 2-Tier Hierarchy) */}
+          <div className="flex items-center flex-wrap gap-2 pt-2 lg:pt-0">
+            <button
+              onClick={() => onNavigate('financial-reports')}
+              className="px-3.5 py-2 bg-surface-alt hover:bg-surface text-forest border border-surface-border font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-xs hover:border-gold-400"
+            >
+              <DollarSign className="w-4 h-4 text-gold-700" />
+              <span>{t('navFinancial')}</span>
+              {pendingRevenue > 0 && (
+                <span className="px-1.5 py-0.2 rounded-full text-[10px] font-black bg-gold-400 text-forest">
+                  {pendingPaymentsCount}
+                </span>
+              )}
+            </button>
+            <button
+              onClick={() => onNavigate('students-list')}
+              className="px-3.5 py-2 bg-surface-alt hover:bg-surface text-forest border border-surface-border font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-xs hover:border-brand-400"
+            >
+              <Users className="w-4 h-4 text-brand-600" />
+              <span>{t('navStudents')}</span>
+              <span className="text-[11px] font-mono font-bold text-forest-muted">({students.length})</span>
+            </button>
+            <button
+              onClick={() => setShowAddGroupModal(true)}
+              className="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white font-black rounded-xl text-xs shadow-warm-sm transition transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-1.5"
+            >
+              <PlusCircle className="w-4 h-4 text-white" />
+              <span>+ {isRTL ? 'إضافة موعد دراسي جديد' : 'Add New Class'}</span>
+            </button>
           </div>
         </div>
 
-        {/* Desktop Tabs */}
-        <div className="hidden md:flex items-center space-x-2 space-x-reverse mt-6 pt-6 border-t border-white/20 text-sm font-bold overflow-x-auto">
+        {/* Integrated Segmented Navigation Tabs */}
+        <div className="px-4 py-2 bg-surface-alt/70 border-t border-surface-border flex items-center gap-1.5 overflow-x-auto no-scrollbar">
           {[
             { id: 'dashboard', label: t('navOverview') },
             { id: 'students-list', label: `${t('navStudents')} (${students.length})` },
             { id: 'financial-reports', label: t('navFinancial') },
-            { id: 'groups-management', label: t('navGroups') },
+            { id: 'groups-management', label: `${t('navGroups')} (${groups.length})` },
             { id: 'center-settings', label: t('navSettings') }
           ].map(tab => (
             <button
               key={tab.id}
               onClick={() => onNavigate(tab.id)}
-              className={`px-4 py-2 rounded-xl transition whitespace-nowrap ${
-                currentTab === tab.id
-                  ? 'bg-white text-purple-900 shadow-md font-black'
-                  : 'text-white/80 hover:bg-white/10'
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 ${
+                currentTab === tab.id || (!currentTab && tab.id === 'dashboard')
+                  ? 'bg-surface text-forest shadow-xs font-black border border-surface-border'
+                  : 'text-forest-muted hover:text-forest hover:bg-surface/50'
               }`}
             >
               {tab.label}
@@ -196,164 +291,420 @@ export const SuperAdminPortal = ({ currentTab, onNavigate }) => {
       {/* Tab 1: Dashboard Overview */}
       {(currentTab === 'dashboard' || !currentTab) && (
         <div className="space-y-6">
+          {/* ZONE 3: At-A-Glance Metric Strip (4 High-Density Operational Tiles) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-400">{t('totalStudents')}</span>
-                <div className="w-10 h-10 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center">
-                  <Users className="w-5 h-5" />
+            
+            {/* 1. Collected Revenue */}
+            <div className="bg-surface p-4 sm:p-5 rounded-2xl border border-surface-border shadow-warm-xs flex flex-col justify-between hover:border-gold-300 transition-colors">
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-forest-muted">{t('collectedRevenue')}</span>
+                  <div className="w-8 h-8 rounded-lg bg-gold-50 text-gold-700 flex items-center justify-center border border-gold-200">
+                    <DollarSign className="w-4 h-4" />
+                  </div>
+                </div>
+                <div className="mt-2.5">
+                  <div className="text-2xl font-black text-forest font-mono tracking-tight">
+                    {totalRevenue.toLocaleString()} <span className="text-xs font-bold text-forest-muted">{t('currency')}</span>
+                  </div>
                 </div>
               </div>
-              <div className="mt-3">
-                <div className="text-2xl font-black text-slate-800">
-                  {students.length} <span className="text-sm font-medium text-slate-500">{t('student')}</span>
-                </div>
-                <p className="text-xs text-purple-600 mt-1 font-semibold">
-                  Math: {mathStudents} • English: {engStudents}
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-400">{t('collectedRevenue')}</span>
-                <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                  <DollarSign className="w-5 h-5" />
-                </div>
-              </div>
-              <div className="mt-3">
-                <div className="text-2xl font-black text-emerald-700 font-mono">
-                  {totalRevenue.toLocaleString()} {t('currency')}
-                </div>
-                <p className="text-xs text-slate-500 mt-1 font-semibold">
-                  InstaPay, Vodafone Cash, Bank
-                </p>
+              <div className="mt-3 pt-2.5 border-t border-surface-border flex items-center justify-between text-[11px]">
+                {pendingRevenue > 0 ? (
+                  <span className="font-bold text-amber-900 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                    {pendingRevenue.toLocaleString()} {t('currency')} {t('pendingRevenue')}
+                  </span>
+                ) : (
+                  <span className="font-bold text-brand-700 bg-brand-50 px-2 py-0.5 rounded border border-brand-200">
+                    {isRTL ? 'جميع التحصيلات مدققة' : 'Verified'}
+                  </span>
+                )}
+                <button onClick={() => onNavigate('financial-reports')} className="font-bold text-brand-600 hover:text-brand-700">
+                  {t('details')} →
+                </button>
               </div>
             </div>
 
-            <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-400">{t('occupancyRate')}</span>
-                <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
-                  <PieChart className="w-5 h-5" />
+            {/* 2. Total Students */}
+            <div className="bg-surface p-4 sm:p-5 rounded-2xl border border-surface-border shadow-warm-xs flex flex-col justify-between hover:border-brand-300 transition-colors">
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-forest-muted">{t('totalStudents')}</span>
+                  <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center border border-brand-200">
+                    <Users className="w-4 h-4" />
+                  </div>
+                </div>
+                <div className="mt-2.5">
+                  <div className="text-2xl font-black text-forest tracking-tight">
+                    {students.length} <span className="text-xs font-medium text-forest-muted">{t('student')}</span>
+                  </div>
                 </div>
               </div>
-              <div className="mt-3">
-                <div className="text-2xl font-black text-slate-800">{occupancyRate}%</div>
-                <p className="text-xs text-slate-500 mt-1">
+              <div className="mt-3 pt-2.5 border-t border-surface-border flex items-center justify-between text-[11px] font-bold">
+                <div className="flex items-center space-x-1.5 space-x-reverse">
+                  <span className="text-brand-700">Math: {mathStudents}</span>
+                  <span className="text-forest-muted">•</span>
+                  <span className="text-gold-800">English: {engStudents}</span>
+                </div>
+                <button onClick={() => onNavigate('students-list')} className="text-brand-600 hover:text-brand-700">
+                  {t('details')} →
+                </button>
+              </div>
+            </div>
+
+            {/* 3. Seat Occupancy Rate */}
+            <div className="bg-surface p-4 sm:p-5 rounded-2xl border border-surface-border shadow-warm-xs flex flex-col justify-between hover:border-brand-300 transition-colors">
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-forest-muted">{t('occupancyRate')}</span>
+                  <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center border border-brand-200">
+                    <PieChart className="w-4 h-4" />
+                  </div>
+                </div>
+                <div className="mt-2.5">
+                  <div className="text-2xl font-black text-forest tracking-tight">{occupancyRate}%</div>
+                  {/* Micro Progress Bar */}
+                  <div className="w-full bg-surface-alt rounded-full h-1.5 mt-2 overflow-hidden border border-surface-border">
+                    <div 
+                      className="bg-brand-500 h-full rounded-full transition-all duration-500" 
+                      style={{ width: `${Math.min(occupancyRate, 100)}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="mt-3 pt-2.5 border-t border-surface-border flex items-center justify-between text-[11px]">
+                <span className="text-forest-muted font-medium">
                   {totalOccupied} {t('seatsOccupiedOf')} {totalCapacity}
-                </p>
+                </span>
+                <span className="font-bold text-brand-700">
+                  {totalCapacity - totalOccupied} {isRTL ? 'شاغر' : 'left'}
+                </span>
               </div>
             </div>
 
-            <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-400">{t('activeGroups')}</span>
-                <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
-                  <BookOpen className="w-5 h-5" />
+            {/* 4. Active Groups */}
+            <div className="bg-surface p-4 sm:p-5 rounded-2xl border border-surface-border shadow-warm-xs flex flex-col justify-between hover:border-gold-300 transition-colors">
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-forest-muted">{t('activeGroups')}</span>
+                  <div className="w-8 h-8 rounded-lg bg-gold-50 text-gold-700 flex items-center justify-center border border-gold-200">
+                    <BookOpen className="w-4 h-4" />
+                  </div>
+                </div>
+                <div className="mt-2.5">
+                  <div className="text-2xl font-black text-forest tracking-tight">
+                    {groups.length} <span className="text-xs font-medium text-forest-muted">{t('groupsCount')}</span>
+                  </div>
                 </div>
               </div>
-              <div className="mt-3">
-                <div className="text-2xl font-black text-slate-800">
-                  {groups.length} <span className="text-sm font-medium text-slate-500">{t('groupsCount')}</span>
-                </div>
-                <p className="text-xs text-amber-600 mt-1 font-semibold">
-                  KG & Primary
-                </p>
+              <div className="mt-3 pt-2.5 border-t border-surface-border flex items-center justify-between text-[11px] font-bold">
+                <span className="text-forest-muted">
+                  KG: {groups.filter(g => g.stage === 'kg').length} • Primary: {groups.filter(g => g.stage === 'primary').length}
+                </span>
+                <button onClick={() => onNavigate('groups-management')} className="text-gold-700 hover:text-gold-800">
+                  {t('details')} →
+                </button>
               </div>
             </div>
+
           </div>
 
-          {/* Master Timetable Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-extrabold text-slate-800 text-lg">
-                  {t('weeklyScheduleHeader')}
-                </h3>
-                <button 
-                  onClick={() => onNavigate('groups-management')} 
-                  className="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold transition"
-                >
-                  {t('navGroups')} →
-                </button>
+          {/* ZONE 4: Asymmetric Operational Workspace (70% Schedule / 30% Operations Pulse) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            {/* 4A. Master Timetable & Class Sessions (8 Cols) */}
+            <div className="lg:col-span-8 bg-surface rounded-2xl p-5 sm:p-6 border border-surface-border shadow-warm-xs flex flex-col justify-between">
+              <div>
+                {/* Header & Filter Controls */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3.5 border-b border-surface-border">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-extrabold text-forest text-base sm:text-lg">
+                        {selectedDayFilter === 'today' 
+                          ? `${t('todayClasses')} (${isRTL ? todayNameAr : todayNameEn})` 
+                          : (selectedDayFilter === 'all' 
+                              ? t('allDaysClasses') 
+                              : `${isRTL ? 'جدول يوم' : 'Classes for'} ${selectedDayFilter}`)}
+                      </h3>
+                      <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-brand-50 text-brand-800 border border-brand-200">
+                        {filteredScheduleGroups.length} {t('groupsCount')}
+                      </span>
+                    </div>
+                    <p className="text-xs text-forest-muted mt-0.5">
+                      {selectedDayFilter === 'today' 
+                        ? (isRTL ? `مواعيد الحصص المجدولة لليوم (${todayNameAr})` : `Classes scheduled for today (${todayNameEn})`) 
+                        : (isRTL ? 'استعراض مواعيد الحصص والقاعات ونسب الإشغال' : 'Browse group schedules, halls, and occupancy')}
+                    </p>
+                  </div>
+
+                  <button 
+                    onClick={() => onNavigate('groups-management')} 
+                    className="self-start sm:self-auto px-3 py-1.5 bg-surface-alt hover:bg-surface text-forest border border-surface-border rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-xs"
+                  >
+                    <span>{t('navGroups')}</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 text-forest-muted" />
+                  </button>
+                </div>
+
+                {/* Day Filter Segmented Strip */}
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-2.5 mb-3.5 text-xs font-bold no-scrollbar">
+                  <button
+                    onClick={() => setSelectedDayFilter('today')}
+                    className={`px-3 py-1.5 rounded-lg whitespace-nowrap transition flex items-center gap-1.5 ${
+                      selectedDayFilter === 'today'
+                        ? 'bg-forest text-white shadow-xs font-black'
+                        : 'bg-surface-alt text-forest-muted hover:text-forest hover:bg-brand-50 border border-surface-border'
+                    }`}
+                  >
+                    <Clock className="w-3.5 h-3.5 text-brand-400" />
+                    <span>{t('todayClasses')} ({isRTL ? todayNameAr : todayNameEn})</span>
+                  </button>
+                  <button
+                    onClick={() => setSelectedDayFilter('all')}
+                    className={`px-3 py-1.5 rounded-lg whitespace-nowrap transition ${
+                      selectedDayFilter === 'all'
+                        ? 'bg-brand-500 text-white shadow-xs font-black'
+                        : 'bg-surface-alt text-forest-muted hover:text-forest hover:bg-brand-50 border border-surface-border'
+                    }`}
+                  >
+                    {t('allDaysClasses')}
+                  </button>
+                  {[
+                    { ar: 'السبت', en: 'Saturday' },
+                    { ar: 'الأحد', en: 'Sunday' },
+                    { ar: 'الاثنين', en: 'Monday' },
+                    { ar: 'الثلاثاء', en: 'Tuesday' },
+                    { ar: 'الأربعاء', en: 'Wednesday' },
+                    { ar: 'الخميس', en: 'Thursday' }
+                  ].map(d => {
+                    const isSelected = selectedDayFilter === d.ar || selectedDayFilter === d.en;
+                    return (
+                      <button
+                        key={d.en}
+                        onClick={() => setSelectedDayFilter(isRTL ? d.ar : d.en)}
+                        className={`px-3 py-1.5 rounded-lg whitespace-nowrap transition ${
+                          isSelected
+                            ? 'bg-brand-500 text-white shadow-xs font-black'
+                            : 'bg-surface-alt text-forest-muted hover:text-forest hover:bg-brand-50 border border-surface-border'
+                        }`}
+                      >
+                        {isRTL ? d.ar : d.en}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Structured Operational Session Rows */}
+                {filteredScheduleGroups.length === 0 ? (
+                  <div className="p-8 text-center bg-surface-alt/50 rounded-xl border border-dashed border-surface-border my-2">
+                    <div className="w-10 h-10 mx-auto rounded-full bg-brand-50 text-brand-600 flex items-center justify-center mb-2.5">
+                      <Calendar className="w-5 h-5" />
+                    </div>
+                    <h4 className="text-sm font-bold text-forest">
+                      {t('noClassesToday')}
+                    </h4>
+                    <p className="text-xs text-forest-muted mt-0.5 max-w-sm mx-auto">
+                      لا توجد مواعيد مجدولة لهذا اليوم. يمكنك استعراض باقي أيام الأسبوع أو إضافة موعد جديد.
+                    </p>
+                    <div className="flex items-center justify-center space-x-2 space-x-reverse mt-3.5">
+                      <button
+                        onClick={() => setSelectedDayFilter('all')}
+                        className="px-3 py-1.5 bg-brand-500 text-white rounded-xl text-xs font-bold shadow-xs hover:bg-brand-600 transition"
+                      >
+                        {t('allDaysClasses')}
+                      </button>
+                      <button
+                        onClick={() => setShowAddGroupModal(true)}
+                        className="px-3 py-1.5 bg-surface text-forest border border-surface-border rounded-xl text-xs font-bold hover:bg-surface-alt transition"
+                      >
+                        + {isRTL ? 'إضافة موعد جديد' : 'Add Class'}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-2.5">
+                    {filteredScheduleGroups.map(g => (
+                      <div
+                        key={g.id}
+                        className="p-3.5 bg-surface hover:bg-surface-alt/50 rounded-xl border border-surface-border transition flex flex-col md:flex-row md:items-center justify-between gap-3 group"
+                      >
+                        {/* Group Details & Subject */}
+                        <div className="flex items-start sm:items-center gap-3">
+                          <span className={`px-2.5 py-1 rounded-lg text-xs font-black shrink-0 ${
+                            g.subject === 'math'
+                              ? 'bg-brand-50 text-brand-800 border border-brand-200'
+                              : 'bg-gold-50 text-gold-800 border border-gold-200'
+                          }`}>
+                            {g.subject === 'math' ? 'Math' : 'English'}
+                          </span>
+                          <div>
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <h4 className="font-extrabold text-forest text-sm">
+                                {isRTL ? g.name : (g.nameEn || g.name)}
+                              </h4>
+                              <span className="text-[11px] font-semibold text-forest-muted bg-surface-alt px-2 py-0.5 rounded border border-surface-border">
+                                {isRTL ? g.grade : (g.grade?.replace(/\s*\([\u0600-\u06FF\s]+\)/g, '') || g.grade)}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-3 text-xs text-forest-muted mt-1 font-medium">
+                              <span className="flex items-center gap-1 font-mono">
+                                <Clock className="w-3.5 h-3.5 text-brand-600" />
+                                <span>{isRTL ? g.time : (g.timeEn || g.time)}</span>
+                              </span>
+                              <span>•</span>
+                              <span className="flex items-center gap-1">
+                                <MapPin className="w-3.5 h-3.5 text-forest-muted" />
+                                <span>{isRTL ? (g.location || 'قاعة السنتر') : (g.locationEn || g.location || 'Center Hall')}</span>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Capacity Meter & Quick Action */}
+                        <div className="flex items-center justify-between md:justify-end gap-4 pt-2 md:pt-0 border-t border-surface-border md:border-t-0">
+                          <div className="text-start md:text-end">
+                            <div className="text-xs font-bold text-forest">
+                              <span>{g.studentIds.length} / {g.maxCapacity}</span>
+                              <span className="text-forest-muted text-[11px] font-normal mr-1 ml-1">{t('student')}</span>
+                            </div>
+                            <div className="w-24 bg-surface-alt rounded-full h-1.5 mt-1 overflow-hidden border border-surface-border">
+                              <div
+                                className={`h-full rounded-full ${
+                                  g.studentIds.length >= g.maxCapacity ? 'bg-rose-500' : (g.subject === 'math' ? 'bg-brand-500' : 'bg-gold-500')
+                                }`}
+                                style={{ width: `${Math.min((g.studentIds.length / g.maxCapacity) * 100, 100)}%` }}
+                              />
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => onNavigate('groups-management')}
+                            className="px-3 py-1.5 text-xs font-bold text-brand-700 hover:text-brand-800 bg-surface rounded-lg border border-surface-border hover:bg-surface-alt transition shadow-2xs whitespace-nowrap"
+                          >
+                            {t('details')} →
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {groups.map(g => (
-                  <div
-                    key={g.id}
-                    className={`p-4 rounded-2xl border ${
-                      g.subject === 'math'
-                        ? 'border-indigo-100 bg-indigo-50/40'
-                        : 'border-pink-100 bg-pink-50/40'
-                    } flex flex-col justify-between`}
+              {/* Bottom Quick Bar */}
+              <div className="mt-4 pt-3 border-t border-surface-border flex items-center justify-between text-xs text-forest-muted">
+                <span>{isRTL ? centerInfo.address : (centerInfo.addressEn || centerInfo.address)}</span>
+                <span className="font-bold text-forest">
+                  {isRTL ? `معلمة المادة: ${centerInfo.owner}` : `Instructor: Miss Marina`}
+                </span>
+              </div>
+            </div>
+
+            {/* 4B. Operations Pulse & Utilities Hub (4 Cols) */}
+            <div className="lg:col-span-4 bg-surface rounded-2xl p-5 sm:p-6 border border-surface-border shadow-warm-xs flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4 pb-3 border-b border-surface-border">
+                  <div className="flex items-center gap-2">
+                    <Activity className="w-4 h-4 text-brand-600" />
+                    <h3 className="font-extrabold text-forest text-base">
+                      {t('centerPulse')}
+                    </h3>
+                  </div>
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                </div>
+
+                {/* Priority Attention Tiles */}
+                <div className="space-y-2.5">
+                  {/* Pending receipts monitor */}
+                  <div 
+                    onClick={() => onNavigate('financial-reports')}
+                    className="p-3 bg-surface-alt hover:bg-gold-50/50 rounded-xl border border-surface-border cursor-pointer transition flex items-center justify-between group"
                   >
                     <div>
-                      <div className="flex items-center justify-between">
-                        <span className={`text-xs font-bold px-2 py-0.5 rounded-md ${
-                          g.subject === 'math' ? 'bg-indigo-600 text-white' : 'bg-pink-600 text-white'
-                        }`}>
-                          {g.subject === 'math' ? 'Math' : 'English'}
-                        </span>
-                        <span className="text-xs font-bold text-slate-600 font-mono">
-                          {isRTL ? g.day : (g.dayEn || g.day)}
-                        </span>
-                      </div>
-                      <h4 className="font-bold text-slate-900 mt-2 text-sm">
-                        {isRTL ? g.name : (g.nameEn || g.name)}
-                      </h4>
-                      <div className="text-xs text-slate-600 mt-1 font-mono">
-                        {isRTL ? g.time : (g.timeEn || g.time)}
-                      </div>
-                    </div>
-                    <div className="mt-3 pt-2 border-t border-slate-200/60 flex items-center justify-between text-xs">
-                      <span className="font-bold text-slate-700">
-                        {t('monthlyFee')}: {g.monthlyFee} {t('currency')}
+                      <span className="text-xs font-bold text-forest group-hover:text-gold-900 block">
+                        {t('pendingReviewReceipts')}
                       </span>
-                      <span className="font-bold text-indigo-700">
-                        {g.studentIds.length} {t('enrolledStudents')}
+                      <span className="text-[11px] text-forest-muted">
+                        {pendingRevenue > 0 
+                          ? `${pendingRevenue.toLocaleString()} ${t('currency')} ${isRTL ? 'بانتظار الاعتماد' : 'pending verification'}` 
+                          : (isRTL ? 'جميع التحصيلات معتمدة' : 'All collections verified')}
                       </span>
                     </div>
+                    <span className={`px-2 py-0.5 rounded-lg text-xs font-black ${
+                      pendingPaymentsCount > 0 ? 'bg-gold-100 text-gold-900 border border-gold-300' : 'bg-surface text-forest-muted border border-surface-border'
+                    }`}>
+                      {pendingPaymentsCount}
+                    </span>
                   </div>
-                ))}
-              </div>
-            </div>
 
-            {/* Coordinator Monitoring Card */}
-            <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-extrabold text-slate-800 text-base">
-                    {t('coordinatorFollowUp')}
-                  </h3>
-                  <span className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" />
-                </div>
-                <div className="space-y-3">
-                  <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-700">تسكين الحصص التعويضية:</span>
-                    <span className="text-xs font-bold text-purple-700">{t('coordinatorStatusActive')}</span>
+                  {/* Urgent Makeups monitor */}
+                  <div 
+                    onClick={() => onNavigate('groups-management')}
+                    className="p-3 bg-surface-alt hover:bg-brand-50/50 rounded-xl border border-surface-border cursor-pointer transition flex items-center justify-between group"
+                  >
+                    <div>
+                      <span className="text-xs font-bold text-forest group-hover:text-brand-900 block">
+                        {t('urgentMakeups')}
+                      </span>
+                      <span className="text-[11px] text-forest-muted">
+                        {pendingMakeupCount > 0 
+                          ? (isRTL ? 'بحاجة لتسكين مواعيد بديلة' : 'Pending slot assignment') 
+                          : (isRTL ? 'لا توجد طلبات معلقة' : 'No pending requests')}
+                      </span>
+                    </div>
+                    <span className={`px-2 py-0.5 rounded-lg text-xs font-black ${
+                      pendingMakeupCount > 0 ? 'bg-brand-100 text-brand-900 border border-brand-300' : 'bg-surface text-forest-muted border border-surface-border'
+                    }`}>
+                      {pendingMakeupCount}
+                    </span>
                   </div>
-                  <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-700">{t('coordinatorInquiries')}:</span>
-                    <span className="text-xs font-bold text-emerald-700">{t('coordinatorInquiriesFast')}</span>
-                  </div>
-                  <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-700">{t('coordinatorPaymentAudit')}:</span>
-                    <span className="text-xs font-bold text-blue-700">{t('coordinatorPaymentUpToDate')}</span>
+
+                  {/* Coordinator Status */}
+                  <div className="p-3 bg-surface-alt rounded-xl border border-surface-border flex items-center justify-between">
+                    <div>
+                      <span className="text-xs font-bold text-forest block">
+                        {t('coordinatorInquiries')}
+                      </span>
+                      <span className="text-[11px] text-forest-muted">
+                        {unreadInquiriesCount > 0 
+                          ? (isRTL ? `${unreadInquiriesCount} استفسارات جديدة` : `${unreadInquiriesCount} new inquiries`) 
+                          : t('coordinatorInquiriesFast')}
+                      </span>
+                    </div>
+                    <span className="px-2 py-0.5 rounded-lg text-xs font-bold bg-surface text-brand-700 border border-surface-border">
+                      {t('coordinatorStatusActive')}
+                    </span>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-4 pt-4 border-t border-slate-100">
+              {/* Administrative Utilities */}
+              <div className="mt-5 pt-4 border-t border-surface-border space-y-2">
+                <span className="text-[11px] font-bold text-forest-muted block mb-1">
+                  {t('quickActionsTitle')}
+                </span>
+                <button
+                  onClick={() => setShowAddGroupModal(true)}
+                  className="w-full py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-bold text-xs shadow-warm-xs transition flex items-center justify-center space-x-1.5 space-x-reverse"
+                >
+                  <PlusCircle className="w-4 h-4" />
+                  <span>+ {isRTL ? 'إضافة موعد دراسي جديد' : 'Add Class Group'}</span>
+                </button>
                 <button
                   onClick={() => onNavigate('center-settings')}
-                  className="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-2xl font-bold text-xs transition"
+                  className="w-full py-2 bg-surface-alt hover:bg-surface text-forest rounded-xl font-bold text-xs transition border border-surface-border flex items-center justify-center space-x-1.5 space-x-reverse"
                 >
-                  {t('editPaymentSettingsBtn')}
+                  <Settings className="w-4 h-4 text-forest-muted" />
+                  <span>{t('editPaymentSettingsBtn')}</span>
+                </button>
+                <button
+                  onClick={() => window.print()}
+                  className="w-full py-2 bg-surface-alt hover:bg-surface text-forest rounded-xl font-bold text-xs transition border border-surface-border flex items-center justify-center space-x-1.5 space-x-reverse"
+                >
+                  <Printer className="w-4 h-4 text-forest-muted" />
+                  <span>{t('printReport')}</span>
                 </button>
               </div>
             </div>
+
           </div>
         </div>
       )}
@@ -361,22 +712,22 @@ export const SuperAdminPortal = ({ currentTab, onNavigate }) => {
       {/* Tab 2: Students Directory */}
       {currentTab === 'students-list' && (
         <div className="space-y-6">
-          <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="bg-surface p-6 rounded-xl border border-surface-border shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h3 className="text-xl font-black text-slate-800">{t('navStudents')}</h3>
-              <p className="text-xs text-slate-500 mt-1">
+              <h3 className="text-xl font-black text-forest">{t('navStudents')}</h3>
+              <p className="text-xs text-forest-muted mt-1">
                 سجل الطلاب وأولياء الأمور المقيدين في سنتر مس مارينا
               </p>
             </div>
-            <span className="px-3 py-1 bg-purple-50 text-purple-800 border border-purple-200 rounded-xl text-xs font-bold">
+            <span className="px-3 py-1 bg-brand-50 text-brand-800 border border-brand-200 rounded-xl text-xs font-bold">
               {students.length} {t('student')}
             </span>
           </div>
 
-          <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+          <div className="bg-surface rounded-xl border border-surface-border shadow-xs overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-start text-xs">
-                <thead className="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                <thead className="bg-surface-alt text-forest-muted font-bold border-b border-surface-border">
                   <tr>
                     <th className="p-3.5">اسم الطالب</th>
                     <th className="p-3.5">ولي الأمر</th>
@@ -387,28 +738,28 @@ export const SuperAdminPortal = ({ currentTab, onNavigate }) => {
                     <th className="p-3.5">{t('actions')}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-surface-border/60">
                   {students.map(st => (
-                    <tr key={st.id} className="hover:bg-slate-50/80 transition">
-                      <td className="p-3.5 font-extrabold text-slate-900 flex items-center space-x-2 space-x-reverse">
+                    <tr key={st.id} className="hover:bg-surface-alt/70 transition">
+                      <td className="p-3.5 font-extrabold text-forest flex items-center space-x-2 space-x-reverse">
                         <span className="text-lg">{st.avatar || '👦'}</span>
                         <span>{st.studentName}</span>
                       </td>
-                      <td className="p-3.5 text-slate-700 font-semibold">{st.name}</td>
+                      <td className="p-3.5 text-forest font-semibold">{st.name}</td>
                       <td className="p-3.5">
-                        <span className="px-2 py-0.5 rounded-md font-bold text-[11px] bg-blue-100 text-blue-800">
+                        <span className="px-2 py-0.5 rounded-md font-bold text-[11px] bg-brand-50 text-brand-800 border border-brand-200">
                           {st.grade}
                         </span>
                       </td>
-                      <td className="p-3.5 text-slate-800 font-semibold">
+                      <td className="p-3.5 text-forest font-semibold">
                         {st.subjects.map(s => s === 'math' ? t('math') : t('english')).join(' + ')}
                       </td>
-                      <td className="p-3.5 font-mono text-slate-700">{st.phone}</td>
-                      <td className="p-3.5 font-mono text-slate-800 font-bold">{st.username}</td>
+                      <td className="p-3.5 font-mono text-forest-muted">{st.phone}</td>
+                      <td className="p-3.5 font-mono text-forest font-bold">{st.username}</td>
                       <td className="p-3.5">
                         <button
                           onClick={() => handleOpenEditStudent(st)}
-                          className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-bold text-xs flex items-center space-x-1 space-x-reverse"
+                          className="px-2.5 py-1 bg-surface-alt hover:bg-surface text-forest border border-surface-border rounded-lg font-bold text-xs flex items-center space-x-1 space-x-reverse"
                         >
                           <Edit3 className="w-3.5 h-3.5" />
                           <span>{t('edit')}</span>
@@ -426,14 +777,14 @@ export const SuperAdminPortal = ({ currentTab, onNavigate }) => {
       {/* Tab 3: Financial Reports */}
       {currentTab === 'financial-reports' && (
         <div className="space-y-6">
-          <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="bg-surface p-6 rounded-xl border border-surface-border shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h3 className="text-xl font-black text-slate-800">{t('financialReportTitle')}</h3>
-              <p className="text-xs text-slate-500 mt-1">{t('financialReportSubtitle')}</p>
+              <h3 className="text-xl font-black text-forest">{t('financialReportTitle')}</h3>
+              <p className="text-xs text-forest-muted mt-1">{t('financialReportSubtitle')}</p>
             </div>
             <button
               onClick={() => window.print()}
-              className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs flex items-center transition"
+              className="px-4 py-2 bg-surface-alt hover:bg-surface text-forest border border-surface-border font-bold rounded-xl text-xs flex items-center transition"
             >
               <Printer className="w-4 h-4 ml-1.5 mr-1.5" />
               {t('printReport')}
@@ -441,7 +792,7 @@ export const SuperAdminPortal = ({ currentTab, onNavigate }) => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-gradient-to-br from-purple-700 to-indigo-800 text-white p-5 rounded-3xl shadow-md">
+            <div className="bg-gradient-to-br from-[#4A3B69] to-[#2D2147] text-white p-5 rounded-xl shadow-md border border-purple-300/20">
               <div className="text-xs font-bold text-purple-200">{t('instapayCollections')}</div>
               <div className="text-2xl font-black font-mono mt-2">
                 {instapayRevenue.toLocaleString()} {t('currency')}
@@ -451,7 +802,7 @@ export const SuperAdminPortal = ({ currentTab, onNavigate }) => {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-rose-600 to-red-700 text-white p-5 rounded-3xl shadow-md">
+            <div className="bg-gradient-to-br from-[#8C3A40] to-[#5C1E23] text-white p-5 rounded-xl shadow-md border border-rose-300/20">
               <div className="text-xs font-bold text-rose-200">{t('vodafoneCollections')}</div>
               <div className="text-2xl font-black font-mono mt-2">
                 {vodafoneRevenue.toLocaleString()} {t('currency')}
@@ -461,7 +812,7 @@ export const SuperAdminPortal = ({ currentTab, onNavigate }) => {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-sky-600 to-blue-700 text-white p-5 rounded-3xl shadow-md">
+            <div className="bg-gradient-to-br from-[#295066] to-[#163547] text-white p-5 rounded-xl shadow-md border border-sky-300/20">
               <div className="text-xs font-bold text-sky-200">{t('bankCollections')}</div>
               <div className="text-2xl font-black font-mono mt-2">
                 {bankRevenue.toLocaleString()} {t('currency')}
@@ -472,13 +823,13 @@ export const SuperAdminPortal = ({ currentTab, onNavigate }) => {
             </div>
           </div>
 
-          <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
-            <div className="p-4 bg-slate-50 border-b border-slate-200 font-bold text-slate-800 text-sm">
+          <div className="bg-surface rounded-xl border border-surface-border shadow-xs overflow-hidden">
+            <div className="p-4 bg-surface-alt border-b border-surface-border font-bold text-forest text-sm">
               {t('allTransactionsLog')}
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-start text-xs">
-                <thead className="bg-slate-50/50 text-slate-600 font-bold border-b border-slate-200">
+                <thead className="bg-surface-alt/50 text-forest-muted font-bold border-b border-surface-border">
                   <tr>
                     <th className="p-3.5">{t('student')}</th>
                     <th className="p-3.5">{t('month')}</th>
@@ -489,24 +840,24 @@ export const SuperAdminPortal = ({ currentTab, onNavigate }) => {
                     <th className="p-3.5">{t('date')}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-surface-border/60">
                   {payments.map(p => (
-                    <tr key={p.id} className="hover:bg-slate-50/80 transition">
-                      <td className="p-3.5 font-bold text-slate-900">{p.studentName}</td>
+                    <tr key={p.id} className="hover:bg-surface-alt/70 transition">
+                      <td className="p-3.5 font-bold text-forest">{p.studentName}</td>
                       <td className="p-3.5">{isRTL ? p.month : (p.monthEn || p.month)}</td>
-                      <td className="p-3.5 font-bold font-mono text-slate-900">
+                      <td className="p-3.5 font-bold font-mono text-forest">
                         {p.amount} {t('currency')}
                       </td>
                       <td className="p-3.5 font-semibold uppercase">{p.method}</td>
                       <td className="p-3.5 font-mono">{p.referenceNumber || '-'}</td>
                       <td className="p-3.5">
                         <span className={`px-2.5 py-0.5 rounded-full font-bold text-[11px] ${
-                          p.status === 'paid' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                          p.status === 'paid' ? 'bg-brand-100 text-brand-800 border border-brand-200' : 'bg-gold-100 text-gold-800 border border-gold-200'
                         }`}>
                           {p.status === 'paid' ? t('paid') : t('pending')}
                         </span>
                       </td>
-                      <td className="p-3.5 font-mono text-slate-500">{p.paymentDate || '-'}</td>
+                      <td className="p-3.5 font-mono text-forest-muted">{p.paymentDate || '-'}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -518,10 +869,10 @@ export const SuperAdminPortal = ({ currentTab, onNavigate }) => {
 
       {/* Tab 4: Center & Payment Settings */}
       {currentTab === 'center-settings' && (
-        <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-6">
+        <div className="bg-surface p-6 rounded-2xl border border-surface-border shadow-xs space-y-6">
           <div>
-            <h3 className="text-xl font-black text-slate-800">{t('navSettings')}</h3>
-            <p className="text-xs text-slate-500 mt-1">
+            <h3 className="text-xl font-black text-forest">{t('navSettings')}</h3>
+            <p className="text-xs text-forest-muted mt-1">
               تعديل أرقام فودافون كاش، معرف إنستاباي، والحساب البنكي التي تظهر لأولياء الأمور
             </p>
           </div>
@@ -535,33 +886,33 @@ export const SuperAdminPortal = ({ currentTab, onNavigate }) => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">{t('walletNumber')}</label>
+                  <label className="block text-xs font-bold text-forest mb-1">{t('walletNumber')}</label>
                   <input
                     type="text"
                     value={settingsForm.vfNumber}
                     onChange={(e) => setSettingsForm({ ...settingsForm, vfNumber: e.target.value })}
                     required
-                    className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-mono font-bold"
+                    className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs font-mono font-bold focus:ring-brand-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">اسم صاحب المحفظة:</label>
+                  <label className="block text-xs font-bold text-forest mb-1">اسم صاحب المحفظة:</label>
                   <input
                     type="text"
                     value={settingsForm.vfOwner}
                     onChange={(e) => setSettingsForm({ ...settingsForm, vfOwner: e.target.value })}
                     required
-                    className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold"
+                    className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs font-bold focus:ring-brand-500"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">التعليمات:</label>
+                <label className="block text-xs font-bold text-forest mb-1">التعليمات:</label>
                 <input
                   type="text"
                   value={settingsForm.vfInstructions}
                   onChange={(e) => setSettingsForm({ ...settingsForm, vfInstructions: e.target.value })}
-                  className="w-full p-2.5 rounded-xl border border-slate-300 text-xs"
+                  className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs focus:ring-brand-500"
                 />
               </div>
             </div>
@@ -574,34 +925,34 @@ export const SuperAdminPortal = ({ currentTab, onNavigate }) => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">{t('ipaAddress')}</label>
+                  <label className="block text-xs font-bold text-forest mb-1">{t('ipaAddress')}</label>
                   <input
                     type="text"
                     value={settingsForm.ipa}
                     onChange={(e) => setSettingsForm({ ...settingsForm, ipa: e.target.value })}
                     required
-                    className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-mono font-bold"
+                    className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs font-mono font-bold focus:ring-brand-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">رقم هاتف إنستاباي:</label>
+                  <label className="block text-xs font-bold text-forest mb-1">رقم هاتف إنستاباي:</label>
                   <input
                     type="text"
                     value={settingsForm.ipaPhone}
                     onChange={(e) => setSettingsForm({ ...settingsForm, ipaPhone: e.target.value })}
                     required
-                    className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-mono font-bold"
+                    className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs font-mono font-bold focus:ring-brand-500"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">اسم المستفيد في إنستاباي:</label>
+                <label className="block text-xs font-bold text-forest mb-1">اسم المستفيد في إنستاباي:</label>
                 <input
                   type="text"
                   value={settingsForm.ipaOwner}
                   onChange={(e) => setSettingsForm({ ...settingsForm, ipaOwner: e.target.value })}
                   required
-                  className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold"
+                  className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs font-bold focus:ring-brand-500"
                 />
               </div>
             </div>
@@ -614,44 +965,44 @@ export const SuperAdminPortal = ({ currentTab, onNavigate }) => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">{t('bankName')}</label>
+                  <label className="block text-xs font-bold text-forest mb-1">{t('bankName')}</label>
                   <input
                     type="text"
                     value={settingsForm.bankName}
                     onChange={(e) => setSettingsForm({ ...settingsForm, bankName: e.target.value })}
                     required
-                    className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold"
+                    className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs font-bold focus:ring-brand-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">{t('accountNumber')}</label>
+                  <label className="block text-xs font-bold text-forest mb-1">{t('accountNumber')}</label>
                   <input
                     type="text"
                     value={settingsForm.bankAcc}
                     onChange={(e) => setSettingsForm({ ...settingsForm, bankAcc: e.target.value })}
                     required
-                    className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-mono font-bold"
+                    className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs font-mono font-bold focus:ring-brand-500"
                   />
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">{t('accountHolder')}</label>
+                  <label className="block text-xs font-bold text-forest mb-1">{t('accountHolder')}</label>
                   <input
                     type="text"
                     value={settingsForm.bankHolder}
                     onChange={(e) => setSettingsForm({ ...settingsForm, bankHolder: e.target.value })}
                     required
-                    className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-bold"
+                    className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs font-bold focus:ring-brand-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">{t('iban')}</label>
+                  <label className="block text-xs font-bold text-forest mb-1">{t('iban')}</label>
                   <input
                     type="text"
                     value={settingsForm.bankIban}
                     onChange={(e) => setSettingsForm({ ...settingsForm, bankIban: e.target.value })}
-                    className="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-mono"
+                    className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs font-mono focus:ring-brand-500"
                   />
                 </div>
               </div>
@@ -660,7 +1011,7 @@ export const SuperAdminPortal = ({ currentTab, onNavigate }) => {
             <div className="flex justify-end pt-2">
               <button
                 type="submit"
-                className="px-6 py-2.5 bg-purple-700 hover:bg-purple-800 text-white rounded-xl font-bold text-xs shadow-md transition flex items-center"
+                className="px-6 py-2.5 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-bold text-xs shadow-md shadow-brand-500/20 transition flex items-center"
               >
                 <Save className="w-4 h-4 ml-1.5 mr-1.5" />
                 <span>{t('save')}</span>
@@ -679,55 +1030,55 @@ export const SuperAdminPortal = ({ currentTab, onNavigate }) => {
         >
           <form onSubmit={handleSaveStudent} className="space-y-4 text-start">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">اسم الطالب:</label>
+              <label className="block text-xs font-bold text-forest mb-1">اسم الطالب:</label>
               <input
                 type="text"
                 value={editFormData.studentName}
                 onChange={(e) => setEditFormData({ ...editFormData, studentName: e.target.value })}
                 required
-                className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-bold"
+                className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs font-bold focus:ring-brand-500"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">اسم ولي الأمر:</label>
+              <label className="block text-xs font-bold text-forest mb-1">اسم ولي الأمر:</label>
               <input
                 type="text"
                 value={editFormData.name}
                 onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
                 required
-                className="w-full p-2.5 rounded-xl border border-slate-200 text-xs"
+                className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs focus:ring-brand-500"
               />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">{t('phone')}:</label>
+                <label className="block text-xs font-bold text-forest mb-1">{t('phone')}:</label>
                 <input
                   type="text"
                   value={editFormData.phone}
                   onChange={(e) => setEditFormData({ ...editFormData, phone: e.target.value })}
                   required
-                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-mono"
+                  className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs font-mono focus:ring-brand-500"
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">{t('grade')}:</label>
+                <label className="block text-xs font-bold text-forest mb-1">{t('grade')}:</label>
                 <input
                   type="text"
                   value={editFormData.grade}
                   onChange={(e) => setEditFormData({ ...editFormData, grade: e.target.value })}
                   required
-                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs"
+                  className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs focus:ring-brand-500"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">{t('password')}:</label>
+              <label className="block text-xs font-bold text-forest mb-1">{t('password')}:</label>
               <input
                 type="text"
                 value={editFormData.password}
                 onChange={(e) => setEditFormData({ ...editFormData, password: e.target.value })}
                 required
-                className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-mono font-bold"
+                className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs font-mono font-bold focus:ring-brand-500"
               />
             </div>
 
@@ -735,15 +1086,161 @@ export const SuperAdminPortal = ({ currentTab, onNavigate }) => {
               <button
                 type="button"
                 onClick={() => setEditingStudent(null)}
-                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold"
+                className="px-4 py-2 bg-surface-alt hover:bg-surface text-forest-muted hover:text-forest rounded-xl text-xs font-bold border border-surface-border"
               >
                 {t('cancel')}
               </button>
               <button
                 type="submit"
-                className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold shadow-md"
+                className="px-5 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-bold shadow-md shadow-brand-500/20"
               >
                 {t('save')}
+              </button>
+            </div>
+          </form>
+        </Modal>
+      )}
+
+      {/* Add New Group Modal */}
+      {showAddGroupModal && (
+        <Modal
+          isOpen={showAddGroupModal}
+          onClose={() => setShowAddGroupModal(false)}
+          title={isRTL ? 'إضافة موعد ومجموعة دراسية جديدة لمس مارينا' : 'Add New Class Schedule & Group'}
+        >
+          <form onSubmit={handleCreateGroup} className="space-y-4 text-start">
+            <div>
+              <label className="block text-xs font-bold text-forest mb-1">
+                {isRTL ? 'اسم المجموعة:' : 'Group Name:'}
+              </label>
+              <input
+                type="text"
+                placeholder={isRTL ? 'مثال: ماث - الصف الثاني (مجموعة الأربعاء)' : 'e.g. Math - Grade 2 (Wednesday)'}
+                value={newGroupForm.name}
+                onChange={(e) => setNewGroupForm({ ...newGroupForm, name: e.target.value })}
+                required
+                className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs font-bold focus:ring-brand-500"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-bold text-forest mb-1">{t('subject')}:</label>
+                <select
+                  value={newGroupForm.subject}
+                  onChange={(e) => setNewGroupForm({ ...newGroupForm, subject: e.target.value })}
+                  className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs font-bold"
+                >
+                  <option value="math">Math (ماث)</option>
+                  <option value="english">English (لغة إنجليزية)</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-forest mb-1">{t('grade')}:</label>
+                <input
+                  type="text"
+                  placeholder="Primary 1, Primary 2, KG 2..."
+                  value={newGroupForm.grade}
+                  onChange={(e) => setNewGroupForm({ ...newGroupForm, grade: e.target.value })}
+                  required
+                  className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs font-bold"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-bold text-forest mb-1">{t('day')}:</label>
+                <select
+                  value={newGroupForm.day}
+                  onChange={(e) => {
+                    const d = e.target.value;
+                    const enDays = {
+                      'السبت': 'Saturday',
+                      'الأحد': 'Sunday',
+                      'الاثنين': 'Monday',
+                      'الثلاثاء': 'Tuesday',
+                      'الأربعاء': 'Wednesday',
+                      'الخميس': 'Thursday'
+                    };
+                    setNewGroupForm({ ...newGroupForm, day: d, dayEn: enDays[d] || 'Saturday' });
+                  }}
+                  className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs font-bold"
+                >
+                  <option value="السبت">السبت (Saturday)</option>
+                  <option value="الأحد">الأحد (Sunday)</option>
+                  <option value="الاثنين">الاثنين (Monday)</option>
+                  <option value="الثلاثاء">الثلاثاء (Tuesday)</option>
+                  <option value="الأربعاء">الأربعاء (Wednesday)</option>
+                  <option value="الخميس">الخميس (Thursday)</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-forest mb-1">{t('time')}:</label>
+                <input
+                  type="text"
+                  placeholder="04:00 م - 05:30 م"
+                  value={newGroupForm.time}
+                  onChange={(e) => setNewGroupForm({ ...newGroupForm, time: e.target.value, timeEn: e.target.value })}
+                  required
+                  className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs font-mono font-bold"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-bold text-forest mb-1">
+                  {isRTL ? 'الحد الأقصى للطلاب:' : 'Max Capacity:'}
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  max="30"
+                  value={newGroupForm.maxCapacity}
+                  onChange={(e) => setNewGroupForm({ ...newGroupForm, maxCapacity: parseInt(e.target.value) || 12 })}
+                  required
+                  className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs font-mono font-bold"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-forest mb-1">{t('monthlyFee')} ({t('currency')}):</label>
+                <input
+                  type="number"
+                  min="0"
+                  step="50"
+                  value={newGroupForm.monthlyFee}
+                  onChange={(e) => setNewGroupForm({ ...newGroupForm, monthlyFee: parseFloat(e.target.value) || 450 })}
+                  required
+                  className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs font-mono font-bold"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-forest mb-1">{t('location')}:</label>
+              <input
+                type="text"
+                placeholder="قاعة 1 (السنتر الرئيسي)"
+                value={newGroupForm.location}
+                onChange={(e) => setNewGroupForm({ ...newGroupForm, location: e.target.value, locationEn: e.target.value })}
+                className="w-full p-2.5 rounded-xl border border-surface-border bg-surface text-forest text-xs font-bold"
+              />
+            </div>
+
+            <div className="pt-3 flex justify-end space-x-2 space-x-reverse border-t border-surface-border">
+              <button
+                type="button"
+                onClick={() => setShowAddGroupModal(false)}
+                className="px-4 py-2 bg-surface-alt hover:bg-surface text-forest-muted hover:text-forest rounded-xl text-xs font-bold border border-surface-border"
+              >
+                {t('cancel')}
+              </button>
+              <button
+                type="submit"
+                className="px-5 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-bold shadow-md shadow-brand-500/20"
+              >
+                {isRTL ? 'حفظ وإضافة المجموعة' : 'Save & Add Group'}
               </button>
             </div>
           </form>

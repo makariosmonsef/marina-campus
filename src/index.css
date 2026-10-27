@@ -6,12 +6,58 @@
 
 :root {
   --primary-font: 'Cairo', 'Inter', system-ui, -apple-system, sans-serif;
+  
+  /* Canvas & Surface Tokens (Warm Porcelain & Pure White) */
+  --color-surface-canvas: #FAF7F2;
+  --color-surface-muted: #F3EFE6;
+  --color-surface-card: #FFFFFF;
+  --color-surface-border: #E2DDD2;
+  --color-surface-subtle: #EAE4D9;
+
+  /* Primary Brand (Heritage Deep Ivy & Living Sage) */
+  --color-brand-primary: #2D5A43;
+  --color-brand-sage: #5A826D;
+  --color-brand-light: #F2F7F4;
+  --color-brand-dark: #1D3B2C;
+
+  /* Educational Accents (Warm Baked Clay / Terracotta & Academy Ochre Gold) */
+  --color-coral: #D96B47;
+  --color-coral-light: #FDF7F5;
+  --color-coral-dark: #A34224;
+
+  --color-gold: #C5983D;
+  --color-gold-light: #FAF7F0;
+  --color-gold-dark: #714F16;
+
+  /* Typography Colors */
+  --color-text-charcoal: #1C2822;
+  --color-text-muted: #4A5B52;
+
+  /* Semantic Status Tokens */
+  --color-success: #26733E;
+  --color-success-bg: #EDF6F0;
+  --color-warning: #B87014;
+  --color-warning-bg: #FAF2E6;
+  --color-error: #CC3D35;
+  --color-error-bg: #FDF1F0;
+  --color-info: #2B6987;
+  --color-info-bg: #EEF5F8;
+
+  /* Backwards-compatibility aliases for existing components */
+  --color-bg: var(--color-surface-canvas);
+  --color-bg-alt: var(--color-surface-muted);
+  --color-surface: var(--color-surface-card);
+  --color-border: var(--color-surface-border);
+  --color-border-subtle: var(--color-surface-subtle);
+  --color-brand: var(--color-brand-primary);
+  --color-forest: var(--color-text-charcoal);
+  --color-forest-muted: var(--color-text-muted);
 }
 
 body {
   font-family: var(--primary-font);
-  background-color: #f8fafc;
-  color: #1e293b;
+  background-color: var(--color-surface-canvas);
+  color: var(--color-text-charcoal);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -22,16 +68,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: var(--color-surface-muted);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #C3DACB;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: var(--color-brand-primary);
 }
 
 /* Smooth Globe Spin on Hover */
@@ -61,4 +107,150 @@ body {
     box-shadow: none !important;
     border: 1px solid #e2e8f0 !important;
   }
+}
+
+/* =========================================================================
+   LTR / RTL SPACING FIX
+   Prevents space-x-reverse from inverted margin collisions when dir="ltr"
+   ========================================================================= */
+[dir="ltr"] [class*="space-x-reverse"] {
+  --tw-space-x-reverse: 0 !important;
+}
+
+[dir="ltr"] [class*="space-y-reverse"] {
+  --tw-space-y-reverse: 0 !important;
+}
+
+/* =========================================================================
+   DARK MODE COMPREHENSIVE STYLING
+   ========================================================================= */
+html.dark {
+  color-scheme: dark;
+}
+
+html.dark body {
+  background-color: #0A110D !important;
+  color: #F1F6F3 !important;
+}
+
+/* Base Surfaces & Backgrounds */
+html.dark .bg-surface {
+  background-color: #111C16 !important;
+}
+
+html.dark .bg-surface-alt,
+html.dark [class*="bg-surface-alt"] {
+  background-color: #16241D !important;
+}
+
+html.dark .bg-white {
+  background-color: #142019 !important;
+}
+
+/* Borders */
+html.dark .border-surface-border,
+html.dark [class*="border-surface-border"] {
+  border-color: #21352A !important;
+}
+
+/* Typography with High Legibility */
+html.dark .text-forest {
+  color: #F1F7F4 !important;
+}
+
+html.dark .text-forest-muted,
+html.dark [class*="text-forest-muted"] {
+  color: #A3C1B1 !important;
+}
+
+/* Header & Navigation */
+html.dark header {
+  background-color: rgba(13, 21, 17, 0.96) !important;
+  border-color: #21352A !important;
+}
+
+/* Gradients on Hero and Cards */
+html.dark [class*="from-[#F8F5EF]"],
+html.dark [class*="from-[#FAF7F2]"] {
+  background-image: linear-gradient(to bottom right, #16261E, #111C16, #0A110D) !important;
+  border-color: #21352A !important;
+}
+
+/* Brand Green Elements in Dark Mode */
+html.dark .bg-brand-50,
+html.dark [class*="bg-brand-50"] {
+  background-color: rgba(45, 90, 67, 0.28) !important;
+}
+
+html.dark .border-brand-200,
+html.dark [class*="border-brand-200"] {
+  border-color: #2E5842 !important;
+}
+
+html.dark .text-brand-700,
+html.dark .text-brand-800,
+html.dark .text-brand-900 {
+  color: #A9D7BD !important;
+}
+
+/* Gold Accents in Dark Mode */
+html.dark .bg-gold-50,
+html.dark .bg-gold-100 {
+  background-color: rgba(197, 152, 61, 0.2) !important;
+}
+
+html.dark .text-gold-700,
+html.dark .text-gold-800 {
+  color: #EAC97D !important;
+}
+
+html.dark .border-gold-200,
+html.dark [class*="border-gold-200"] {
+  border-color: #7A5B1E !important;
+}
+
+/* Coral Accents in Dark Mode */
+html.dark .bg-coral-50,
+html.dark .bg-coral-100 {
+  background-color: rgba(217, 107, 71, 0.2) !important;
+}
+
+html.dark .text-coral-700,
+html.dark .text-coral-800 {
+  color: #F8A790 !important;
+}
+
+html.dark .border-coral-200 {
+  border-color: #8A3E26 !important;
+}
+
+/* Modals & Inputs */
+html.dark .bg-surface-card {
+  background-color: #16231C !important;
+}
+
+html.dark input,
+html.dark select,
+html.dark textarea {
+  background-color: #17241E !important;
+  color: #EDF5F0 !important;
+  border-color: #283B31 !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #6C8276 !important;
+}
+
+/* Custom Scrollbars in Dark Mode */
+html.dark ::-webkit-scrollbar-track {
+  background: #111A16;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #25392F;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #395747;
 }

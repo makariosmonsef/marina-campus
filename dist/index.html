@@ -1,18 +1,95 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>سنتر مس مارينا التعليمي | Miss Marina Academy</title>
-    <meta name="description" content="منصة سنتر مس مارينا التعليمي لمادتي الماث والإنجليزي لمراحل رياض الأطفال والابتدائي - إدارة الحصص، الحضور، الحصص التعويضية، والمدفوعات." />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237c3aed' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M22 10v6M2 10l10-5 10 5-10 5z'/><path d='M6 12v5c3 3 9 3 12 0v-5'/></svg>" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/assets/index-B0W25_bT.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-4SlFNvi6.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سنتر مس مارينا التعليمي | Math & English للأطفال والابتدائي</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#F2F6F3',
+                            100: '#E3ECE5',
+                            200: '#C7D9CC',
+                            300: '#ABC6B4',
+                            400: '#8FB39C',
+                            500: '#6F8F7A',
+                            600: '#577260',
+                            700: '#425649',
+                            800: '#2D3A32',
+                            900: '#19211C',
+                            DEFAULT: '#6F8F7A',
+                        },
+                        gold: {
+                            50: '#FAF6ED',
+                            100: '#F4ECDA',
+                            200: '#E9D9B4',
+                            300: '#DEC68E',
+                            400: '#D8B879',
+                            500: '#C6A25C',
+                            600: '#A7833F',
+                            700: '#7E632D',
+                            800: '#54421E',
+                            900: '#2B220F',
+                            DEFAULT: '#D8B879',
+                        },
+                        forest: {
+                            50: '#F4F6F5',
+                            100: '#E5EAE7',
+                            200: '#C7D1CB',
+                            300: '#A3B4A9',
+                            400: '#62776B',
+                            500: '#43554B',
+                            600: '#334139',
+                            700: '#29352F',
+                            800: '#1F2823',
+                            900: '#151B18',
+                            DEFAULT: '#29352F',
+                            muted: '#57655D',
+                        },
+                        surface: {
+                            DEFAULT: '#F8F5EF',
+                            alt: '#F2EDE4',
+                            card: '#FFFFFF',
+                            border: '#E5DFD3',
+                            subtle: '#EDE7DC',
+                        },
+                        primary: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Font Cairo & Custom Styles -->
+  <script type="module" crossorigin src="/assets/index--yN_2fZ_.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-CC_GfsGe.css">
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-800 antialiased selection:bg-purple-100 selection:text-purple-900 font-cairo">
+
+<body class="bg-[#F8F5EF] min-h-screen text-[#29352F] antialiased selection:bg-[#E3ECE5] selection:text-[#29352F]">
+
+    <!-- React App Root Container -->
     <div id="root"></div>
+
+    <!-- Legacy Vanilla App Container Fallback -->
+    <div id="app-root" class="min-h-screen flex flex-col justify-between hidden"></div>
+
+    <!-- Main React Application Entrypoint -->
 </body>
+
 </html>

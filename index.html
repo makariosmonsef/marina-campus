@@ -13,6 +13,53 @@
             theme: {
                 extend: {
                     colors: {
+                        brand: {
+                            50: '#F2F6F3',
+                            100: '#E3ECE5',
+                            200: '#C7D9CC',
+                            300: '#ABC6B4',
+                            400: '#8FB39C',
+                            500: '#6F8F7A',
+                            600: '#577260',
+                            700: '#425649',
+                            800: '#2D3A32',
+                            900: '#19211C',
+                            DEFAULT: '#6F8F7A',
+                        },
+                        gold: {
+                            50: '#FAF6ED',
+                            100: '#F4ECDA',
+                            200: '#E9D9B4',
+                            300: '#DEC68E',
+                            400: '#D8B879',
+                            500: '#C6A25C',
+                            600: '#A7833F',
+                            700: '#7E632D',
+                            800: '#54421E',
+                            900: '#2B220F',
+                            DEFAULT: '#D8B879',
+                        },
+                        forest: {
+                            50: '#F4F6F5',
+                            100: '#E5EAE7',
+                            200: '#C7D1CB',
+                            300: '#A3B4A9',
+                            400: '#62776B',
+                            500: '#43554B',
+                            600: '#334139',
+                            700: '#29352F',
+                            800: '#1F2823',
+                            900: '#151B18',
+                            DEFAULT: '#29352F',
+                            muted: '#57655D',
+                        },
+                        surface: {
+                            DEFAULT: '#F8F5EF',
+                            alt: '#F2EDE4',
+                            card: '#FFFFFF',
+                            border: '#E5DFD3',
+                            subtle: '#EDE7DC',
+                        },
                         primary: {
                             50: '#f5f3ff',
                             100: '#ede9fe',
@@ -33,50 +80,16 @@
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
-<body class="bg-slate-50 min-h-screen text-slate-800 antialiased selection:bg-purple-100 selection:text-purple-900">
+<body class="bg-[#F8F5EF] min-h-screen text-[#29352F] antialiased selection:bg-[#E3ECE5] selection:text-[#29352F]">
 
-    <!-- App Root Container -->
-    <div id="app-root" class="min-h-screen flex flex-col justify-between">
-        <!-- Will be dynamically populated by App.render() -->
-    </div>
+    <!-- React App Root Container -->
+    <div id="root"></div>
 
-    <!-- Global Modal Backdrop -->
-    <div id="global-modal"
-        class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4 overflow-y-auto">
-        <div
-            class="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100 transition-all transform max-h-[90vh] flex flex-col">
-            <!-- Modal Header -->
-            <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
-                <h3 id="global-modal-title" class="font-extrabold text-slate-900 text-base">عنوان النافذة</h3>
-                <button onclick="CommonUI.closeModal()"
-                    class="p-1 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-            <!-- Modal Content Body -->
-            <div id="global-modal-body" class="p-6 overflow-y-auto flex-1">
-                <!-- Injected via CommonUI.openModal -->
-            </div>
-            <!-- Modal Footer (Optional) -->
-            <div id="global-modal-footer"
-                class="p-4 bg-slate-50 border-t border-slate-100 hidden justify-end space-x-2 space-x-reverse">
-            </div>
-        </div>
-    </div>
+    <!-- Legacy Vanilla App Container Fallback -->
+    <div id="app-root" class="min-h-screen flex flex-col justify-between hidden"></div>
 
-    <!-- Toast Container -->
-    <div id="toast-container"
-        class="fixed bottom-5 left-5 z-50 flex flex-col space-y-2 pointer-events-auto max-w-sm w-full"></div>
-
-    <!-- Application Scripts -->
-    <script src="assets/js/data.js"></script>
-    <script src="assets/js/store.js"></script>
-    <script src="assets/js/components/common.js"></script>
-    <script src="assets/js/components/superAdmin.js"></script>
-    <script src="assets/js/components/coordinator.js"></script>
-    <script src="assets/js/components/parentPortal.js"></script>
-    <script src="assets/js/components/auth.js"></script>
-    <script src="assets/js/app.js"></script>
+    <!-- Main React Application Entrypoint -->
+    <script type="module" src="/src/main.jsx"></script>
 </body>
 
 </html>

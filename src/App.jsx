@@ -12,6 +12,7 @@ import { RegisterModal } from './components/auth/RegisterModal';
 import { SuperAdminPortal } from './components/superadmin/SuperAdminPortal';
 import { CoordinatorPortal } from './components/coordinator/CoordinatorPortal';
 import { ParentPortal } from './components/parent/ParentPortal';
+import { Crown, ShieldCheck, UserCheck, GraduationCap } from 'lucide-react';
 
 export const MainContent = () => {
   const { t, isRTL } = useLanguage();
@@ -28,17 +29,23 @@ export const MainContent = () => {
       setShowLoginModal(true);
       return;
     }
+    if (tab === 'register') {
+      setShowRegisterModal(true);
+      return;
+    }
     setCurrentTab(tab);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-    <div className={`min-h-screen flex flex-col justify-between bg-slate-50 text-slate-800 antialiased ${isRTL ? 'font-cairo' : 'font-inter'}`}>
-      {/* Top Header with Globe Button & User Bar */}
+    <div className={`min-h-screen flex flex-col justify-between bg-surface text-forest antialiased ${isRTL ? 'font-cairo' : 'font-inter'}`}>
+      {/* Top Header with Section Nav & User Bar */}
       <Header
         currentTab={currentTab}
         onNavigate={handleNavigate}
         onOpenRoleModal={() => setShowRoleModal(true)}
+        onOpenLogin={() => setShowLoginModal(true)}
+        onOpenRegister={() => setShowRegisterModal(true)}
       />
 
       {/* Main Body */}
@@ -103,7 +110,7 @@ export const MainContent = () => {
         title={t('switchRoleModalTitle')}
       >
         <div className="space-y-4 text-start">
-          <p className="text-xs text-slate-600 font-medium">
+          <p className="text-xs text-forest-muted font-medium">
             يمكنك التبديل الفوري بين أدوار المنصة لاختبار جميع الوظائف:
           </p>
 
@@ -115,16 +122,18 @@ export const MainContent = () => {
                 setShowRoleModal(false);
                 addToast(t('toastRoleSwitched') + ' (مس مارينا)', 'success');
               }}
-              className="p-4 rounded-2xl border-2 border-purple-200 bg-purple-50/50 hover:bg-purple-100/70 cursor-pointer transition flex items-center justify-between"
+              className="p-4 rounded-xl border border-gold-300 bg-gold-50/70 hover:bg-gold-100/80 cursor-pointer transition flex items-center justify-between"
             >
               <div className="flex items-center space-x-3 space-x-reverse">
-                <span className="text-2xl">👩‍🏫</span>
+                <div className="w-9 h-9 rounded-lg bg-gold-100 text-gold-700 flex items-center justify-center">
+                  <Crown className="w-5 h-5" />
+                </div>
                 <div>
-                  <h4 className="font-bold text-slate-900 text-xs">مس مارينا (Super Admin)</h4>
-                  <p className="text-[11px] text-purple-700">{t('marinaRoleDesc')}</p>
+                  <h4 className="font-bold text-forest text-xs">مس مارينا (Super Admin)</h4>
+                  <p className="text-[11px] text-gold-800">{t('marinaRoleDesc')}</p>
                 </div>
               </div>
-              <span className="text-xs font-bold text-purple-700">{t('enterAs')} ←</span>
+              <span className="text-xs font-bold text-gold-800">{t('enterAs')} ←</span>
             </div>
 
             {/* Coordinator */}
@@ -134,16 +143,18 @@ export const MainContent = () => {
                 setShowRoleModal(false);
                 addToast(t('toastRoleSwitched') + ' (الكوردينيتور)', 'success');
               }}
-              className="p-4 rounded-2xl border-2 border-blue-200 bg-blue-50/50 hover:bg-blue-100/70 cursor-pointer transition flex items-center justify-between"
+              className="p-4 rounded-xl border border-brand-300 bg-brand-50/70 hover:bg-brand-100/80 cursor-pointer transition flex items-center justify-between"
             >
               <div className="flex items-center space-x-3 space-x-reverse">
-                <span className="text-2xl">👨‍💼</span>
+                <div className="w-9 h-9 rounded-lg bg-brand-100 text-brand-700 flex items-center justify-center">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
                 <div>
-                  <h4 className="font-bold text-slate-900 text-xs">كوردينيتور السنتر (Coordinator)</h4>
-                  <p className="text-[11px] text-blue-700">{t('coordinatorRoleDesc')}</p>
+                  <h4 className="font-bold text-forest text-xs">كوردينيتور السنتر (Coordinator)</h4>
+                  <p className="text-[11px] text-brand-700">{t('coordinatorRoleDesc')}</p>
                 </div>
               </div>
-              <span className="text-xs font-bold text-blue-700">{t('enterAs')} ←</span>
+              <span className="text-xs font-bold text-brand-700">{t('enterAs')} ←</span>
             </div>
 
             {/* Parent 1 */}
@@ -153,16 +164,18 @@ export const MainContent = () => {
                 setShowRoleModal(false);
                 addToast(t('toastRoleSwitched') + ' (يوسف أحمد)', 'success');
               }}
-              className="p-4 rounded-2xl border-2 border-emerald-200 bg-emerald-50/50 hover:bg-emerald-100/70 cursor-pointer transition flex items-center justify-between"
+              className="p-4 rounded-xl border border-surface-border bg-surface-alt/70 hover:bg-surface-alt cursor-pointer transition flex items-center justify-between"
             >
               <div className="flex items-center space-x-3 space-x-reverse">
-                <span className="text-2xl">👦</span>
+                <div className="w-9 h-9 rounded-lg bg-surface text-forest flex items-center justify-center border border-surface-border">
+                  <UserCheck className="w-5 h-5 text-forest" />
+                </div>
                 <div>
-                  <h4 className="font-bold text-slate-900 text-xs">ولي الأمر (يوسف أحمد - Primary 3)</h4>
-                  <p className="text-[11px] text-emerald-700">{t('parentRoleDesc')}</p>
+                  <h4 className="font-bold text-forest text-xs">ولي الأمر (يوسف أحمد - Primary 3)</h4>
+                  <p className="text-[11px] text-forest-muted">{t('parentRoleDesc')}</p>
                 </div>
               </div>
-              <span className="text-xs font-bold text-emerald-700">{t('enterAs')} ←</span>
+              <span className="text-xs font-bold text-forest">{t('enterAs')} ←</span>
             </div>
 
             {/* Parent 2 (KG) */}
@@ -172,16 +185,17 @@ export const MainContent = () => {
                 setShowRoleModal(false);
                 addToast(t('toastRoleSwitched') + ' (ليلى - KG2)', 'success');
               }}
-              className="p-4 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-slate-100 cursor-pointer transition flex items-center justify-between"
+              className="p-4 rounded-xl border border-surface-border bg-surface-alt/70 hover:bg-surface-alt cursor-pointer transition flex items-center justify-between"
             >
               <div className="flex items-center space-x-3 space-x-reverse">
-                <span className="text-2xl">👧</span>
+                <div className="w-9 h-9 rounded-lg bg-surface text-forest flex items-center justify-center border border-surface-border">
+                  <GraduationCap className="w-5 h-5 text-brand-600" />
+                </div>
                 <div>
-                  <h4 className="font-bold text-slate-900 text-xs">ولي أمر ليلى (KG 2 - English)</h4>
-                  <p className="text-[11px] text-slate-500">طالبة بمرحلة رياض الأطفال</p>
+                  <h4 className="font-bold text-forest text-xs">ولي أمر ليلى (KG 2 - English)</h4>
+                  <p className="text-[11px] text-forest-muted">طالبة بمرحلة رياض الأطفال</p>
                 </div>
               </div>
-              <span className="text-xs font-bold text-slate-600">{t('enterAs')} ←</span>
             </div>
           </div>
         </div>
